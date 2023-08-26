@@ -1,20 +1,22 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import { makeRequest } from '../axios';
 
 function Posts() {
-  const { isLoading, error, data } = useQuery('posts', () =>
+  const { isLoading, error, data } = useQuery(['posts'], () =>
     makeRequest.get('/posts').then((res) => {
       return res.data;
     })
   );
 
+  console.log(data);
+
   return (
     <div>
-      {data.map((post) => (
+      {/* {data.map((post) => (
         <Post post={post} key={post.id} />
-      ))}
+      ))} */}
     </div>
   );
 }
