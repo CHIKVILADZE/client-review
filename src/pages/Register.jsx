@@ -17,8 +17,6 @@ function Register() {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  console.log(inputs);
-
   const handleClick = async (e) => {
     e.preventDefault();
 
@@ -28,7 +26,7 @@ function Register() {
       setError(error.response.data);
     }
   };
-  console.log(error);
+
   return (
     <div className="container">
       <div className="row justify-content-center ">
