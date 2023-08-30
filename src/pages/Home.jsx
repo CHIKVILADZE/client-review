@@ -1,10 +1,10 @@
 import React from 'react';
 import Posts from '../components/Posts';
 
-function Home() {
+function Home({ user }) {
   return (
     <div>
-      <Posts />
+      <Posts user={user} />
     </div>
   );
 }

@@ -11,6 +11,13 @@ export default function Login() {
 
   const [errorState, setErrorState] = useState(null);
 
+  const googleButton = () => {
+    window.open('http://localhost:4000/auth/google/callback');
+  };
+  const githubButton = () => {
+    window.open('http://localhost:4000/auth/github/callback');
+  };
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -67,6 +74,14 @@ export default function Login() {
               Login
             </button>
           </form>
+          <div className="col-7">
+            <div className="btn btn-secondary mt-3" onClick={googleButton}>
+              Sith In With Google
+            </div>
+            <div className="btn btn-secondary mt-3" onClick={githubButton}>
+              Sith In With Github
+            </div>
+          </div>
         </div>
       </div>
     </div>
