@@ -12,10 +12,10 @@ export default function Login() {
   const [errorState, setErrorState] = useState(null);
 
   const googleButton = () => {
-    window.open('http://localhost:4000/auth/google/callback');
+    window.open('http://localhost:4000/auth/google/callback', '_self');
   };
   const githubButton = () => {
-    window.open('http://localhost:4000/auth/github/callback');
+    window.open('http://localhost:4000/auth/github/callback', '_self');
   };
 
   const navigate = useNavigate();
@@ -29,7 +29,8 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(inputs);
+      const loginData = { ...inputs, authMethod: 'custom' };
+      await login(loginData);
       navigate('/');
     } catch (err) {
       setErrorState(err.response.data);
@@ -74,7 +75,7 @@ export default function Login() {
               Login
             </button>
           </form>
-          <div className="col-7">
+          <div className="col-4">
             <div className="btn btn-secondary mt-3" onClick={googleButton}>
               Sith In With Google
             </div>

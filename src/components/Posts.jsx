@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { makeRequest } from '../axios';
+import { AuthContext } from '../context/authContext';
 
-function Posts({ user }) {
+function Posts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,17 +38,14 @@ function Posts({ user }) {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  const handleLogout = async () => {
-    window.open('http://localhost:4000/auth/logout', '_self');
-  };
-  console.log();
+
+  console.log('uscurrentUserer', currentUser);
 
   return (
     <div className="container my-5" style={{ width: '45%' }}>
-      <button onClick={handleLogout}>Log Out</button>
-      {user && user.firstName && (
+      {currentUser && currentUser.firstName && (
         <div>
-          <h1>{user.firstName}</h1>
+          <h1>{currentUser.firstName}</h1>
         </div>
       )}
       {data && data.length > 0 ? (

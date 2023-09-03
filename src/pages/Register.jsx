@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
@@ -9,7 +9,9 @@ function Register() {
     lastName: '',
     email: '',
     password: '',
+    authMethod: 'custom',
   });
+  const navigate = useNavigate();
 
   const [error, setError] = useState(null);
 
@@ -17,11 +19,12 @@ function Register() {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClick = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       await axios.post('http://localhost:4000/api/auth/register', inputs);
+      navigate('/login');
     } catch (error) {
       setError(error.response.data);
     }
@@ -78,7 +81,7 @@ function Register() {
             <button
               type="submit"
               className="btn btn-primary"
-              onClick={handleClick}
+              onClick={handleRegister}
             >
               Register
             </button>
