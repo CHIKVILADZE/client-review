@@ -1,40 +1,36 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
-import { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [inputs, setInputs] = useState({
-    email: '',
+    username: '',
     password: '',
   });
-
-  const [errorState, setErrorState] = useState(null);
-
-  const googleButton = () => {
-    window.open('http://localhost:4000/auth/google/callback', '_self');
-  };
-  const githubButton = () => {
-    window.open('http://localhost:4000/auth/github/callback', '_self');
-  };
+  const [err, setErr] = useState(null);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
   const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const loginData = { ...inputs, authMethod: 'custom' };
-      await login(loginData);
+      await login(inputs);
       navigate('/');
     } catch (err) {
-      setErrorState(err.response.data);
+      setErr(err.response.data);
     }
+  };
+
+  const googleButton = () => {
+    window.open('http://localhost:4000/auth/google/callback', '_self');
+  };
+  const githubButton = () => {
+    window.open('http://localhost:4000/auth/github/callback', '_self');
   };
 
   return (
@@ -49,8 +45,8 @@ export default function Login() {
                 className="form-control"
                 placeholder="Email"
                 name="email"
-                onChange={handleChange}
                 style={{ width: '300px', height: '30px' }}
+                onChange={handleChange}
               />
             </div>
             <div className="mb-3">
@@ -59,12 +55,9 @@ export default function Login() {
                 className="form-control"
                 placeholder="Password"
                 name="password"
-                onChange={handleChange}
                 style={{ width: '300px', height: '30px' }}
+                onChange={handleChange}
               />
-              {errorState && (
-                <p className="text-danger mt-3">{errorState.error}</p>
-              )}
             </div>
 
             <button

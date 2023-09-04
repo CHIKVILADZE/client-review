@@ -6,21 +6,24 @@ import { Link } from 'react-router-dom';
 
 function TextLink() {
   const { currentUser } = useContext(AuthContext);
-
+  const handleLogout = async () => {
+    localStorage.clear();
+    window.open('http://localhost:4000/auth/logout', '_self');
+  };
   return (
     <Navbar className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">Review Platform</Navbar.Brand>
+        <Navbar.Brand href="/">Review Platform</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
             {currentUser && currentUser.firstName ? (
-              <a href="/userprofile">
-                {currentUser.firstName}
-                <button> Log Out</button>
-              </a>
+              <>
+                <a href="/profile">{currentUser.firstName}</a>
+                <button onClick={handleLogout}>LogOut</button>
+              </>
             ) : (
-              <a href="/login">Sign In</a>
+              <Link to="/login">Log In</Link>
             )}
           </Navbar.Text>
         </Navbar.Collapse>
