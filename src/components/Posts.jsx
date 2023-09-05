@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { Link, useParams } from 'react-router-dom';
 
 function Posts() {
   const { currentUser } = useContext(AuthContext);
@@ -9,8 +9,8 @@ function Posts() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+
+  const { postId } = useParams();
 
   useEffect(() => {
     setIsLoading(true);
@@ -28,39 +28,7 @@ function Posts() {
         setError(err);
         setIsLoading(false);
       });
-    axios
-      .get('http://localhost:4000/api/comments')
-      .then((res) => {
-        setComments(
-          res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        );
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setIsLoading(false);
-      });
   }, []);
-
-  const addComment = () => {
-    const requestData = {
-      text: newComment,
-    };
-
-    axios
-      .post('http://localhost:4000/api/comments', requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-          // Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log('Comment added');
-      })
-      .catch((error) => {
-        console.error('Error adding comment:', error);
-      });
-  };
 
   return (
     <div>
@@ -73,37 +41,29 @@ function Posts() {
                   {post.author && (
                     <>
                       <h2 className="card-title">{post.author.firstName}</h2>
-                      <h5>{post.title}</h5>
+                      <h5 className="card-subtitle mb-2 text-muted">
+                        {post.title}
+                      </h5>
                     </>
                   )}
                   <p className="card-text">{post.desc}</p>
                 </div>
-                <div>
-                  <div className="addComments">
-                    <input
-                      type="text"
-                      placeholder="write a comment"
-                      onChange={(event) => {
-                        setNewComment(event.target.value);
-                      }}
-                    />
-                    <button onClick={addComment}>Add</button>
-                  </div>
-                  <div className="commentsList">
-                    {comments.map((comment, key) => {
-                      return (
-                        <div key={key} className="comment">
-                          {comment.text}
-                        </div>
-                      );
-                    })}
+
+                <div className="card-footer d-flex">
+                  <div className="ml-auto">
+                    <Link
+                      to={`/post/${post.id}`}
+                      className="btn btn-secondary text-white"
+                    >
+                      Review
+                    </Link>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div>No posts available.</div>
+          <div className="alert alert-info">No posts available.</div>
         )}
       </div>
     </div>

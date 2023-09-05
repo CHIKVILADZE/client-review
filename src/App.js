@@ -7,6 +7,7 @@ import axios from 'axios';
 import Navbar from './components/Navbar';
 import { AuthContext } from './context/authContext';
 import Profile from './pages/Profile';
+import Post from './pages/Post';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/post/:postId" element={<Post />} />
         </Routes>
       </BrowserRouter>
     </>
