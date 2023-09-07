@@ -1,6 +1,8 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
+import { AuthContext } from '../context/authContext';
 
 function Post() {
   const { postId } = useParams();
@@ -9,6 +11,11 @@ function Post() {
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [like, setLike] = useState([]);
+  const [likeIds, setLikeIds] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPostById = async () => {
@@ -37,9 +44,28 @@ function Post() {
         setError(err);
         setIsLoading(false);
       });
+    axios
+      .get(`http://localhost:4000/api/likes?postId=${postId}`)
+      .then((response) => {
+        const { postId, likeIds, userIds } = response.data;
+        console.log('Like IDs for the post:', postId, userIds, likeIds);
+
+        setLikeIds(likeIds);
+
+        const currentUserLiked = userIds.includes(currentUser.id);
+
+        setLike(currentUserLiked ? [currentUser.id] : []);
+
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
+      });
 
     fetchPostById();
   }, [postId]);
+  console.log('likes', like);
 
   const addComment = () => {
     const requestData = {
@@ -63,6 +89,52 @@ function Post() {
       });
   };
 
+  const handleLike = () => {
+    axios
+      .post(
+        'http://localhost:4000/api/likes',
+        { postId: postId },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        const updatedLikeInfo = response.data;
+
+        setLike([...like, updatedLikeInfo.userId]);
+      })
+      .catch((error) => {
+        console.error('Error liking post:', error);
+      });
+  };
+
+  console.log('LIKEIIDD', likeIds);
+  const handleDislike = () => {
+    axios
+      .delete('http://localhost:4000/api/likes', {
+        data: {
+          id: likeIds,
+          postId: postId,
+          userId: currentUser.id,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log('responseeeee', response);
+
+        alert(response.data);
+      })
+      .catch((error) => {
+        console.error('Error disliking post:', error);
+      });
+  };
+
   return (
     <div className="container mt-4">
       <div className="card w-80 mx-auto">
@@ -74,6 +146,19 @@ function Post() {
                 <h4 className="card-title">Post - {post.title}</h4>
                 <p className="card-text">{post.desc}</p>
               </div>
+              <div className="d-flex">
+                <div className="d-flex justify-content-between">
+                  {like.includes(currentUser.id) ? (
+                    <FcLike onClick={handleDislike} />
+                  ) : (
+                    <FcLikePlaceholder onClick={handleLike} />
+                  )}
+
+                  <br />
+                  <span>{like.length} Likes</span>
+                </div>
+              </div>
+
               <div className="card-footer">
                 <div className="addComments">
                   <input
