@@ -13,59 +13,55 @@ function Post() {
   const [error, setError] = useState(null);
   const [like, setLike] = useState([]);
   const [likeIds, setLikeIds] = useState([]);
-  const [isLiked, setIsLiked] = useState(false);
+  const [likeIcon, setLikeIcon] = useState(false);
+  const [likeCount, setLikeCount] = useState(null); // Initialize likeIcon as null
 
   const { currentUser } = useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchPostById = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:4000/api/posts/${postId}`
-        );
-        setPost(response.data);
-      } catch (error) {
-        console.error('Error fetching post:', error);
-      }
-    };
+  // Function to update the likeIcon state and save it in local storage
+  const updateLikeIcon = (value) => {
+    setLikeIcon(value);
+    localStorage.setItem(`likeIcon_${postId}`, JSON.stringify(value));
+  };
 
-    axios
-      .get(`http://localhost:4000/api/comments?postId=${postId}`)
-      .then((res) => {
+  useEffect(() => {
+    const fetchPostAndLikes = async () => {
+      try {
+        const [postResponse, commentsResponse, likesResponse] =
+          await Promise.all([
+            axios.get(`http://localhost:4000/api/posts/${postId}`),
+            axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
+          ]);
+
+        setPost(postResponse.data);
         setComments({
           ...comments,
-          [postId]: res.data.sort(
+          [postId]: commentsResponse.data.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           ),
         });
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err);
-        setIsLoading(false);
-      });
-    axios
-      .get(`http://localhost:4000/api/likes?postId=${postId}`)
-      .then((response) => {
-        const { postId, likeIds, userIds } = response.data;
-        console.log('Like IDs for the post:', postId, userIds, likeIds);
 
-        setLikeIds(likeIds);
+        const { likeIds, userIds } = likesResponse.data;
 
-        const currentUserLiked = userIds.includes(currentUser.id);
+        setLike(userIds);
 
-        setLike(currentUserLiked ? [currentUser.id] : []);
+        if (userIds.includes(currentUser.id)) {
+          setLikeIcon(true); // User has liked this post
+        } else {
+          setLikeIcon(false); // User has not liked this post
+        }
 
         setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
+        console.error('Error fetching post and likes:', error);
         setError(error);
         setIsLoading(false);
-      });
+      }
+    };
 
-    fetchPostById();
-  }, [postId]);
-  console.log('likes', like);
+    fetchPostAndLikes();
+  }, [postId, currentUser.id]);
 
   const addComment = () => {
     const requestData = {
@@ -102,16 +98,18 @@ function Post() {
         }
       )
       .then((response) => {
+        // Assuming the response.data contains updated like information
         const updatedLikeInfo = response.data;
 
+        // Update the like state to include the new like
         setLike([...like, updatedLikeInfo.userId]);
+        setLikeIcon(true); // Change the icon to <FcLike />
       })
       .catch((error) => {
         console.error('Error liking post:', error);
       });
   };
 
-  console.log('LIKEIIDD', likeIds);
   const handleDislike = () => {
     axios
       .delete('http://localhost:4000/api/likes', {
@@ -126,9 +124,15 @@ function Post() {
         withCredentials: true,
       })
       .then((response) => {
-        console.log('responseeeee', response);
-
-        alert(response.data);
+        // Remove the user's like from the like state
+        const updatedLikeInfo = response.data;
+        setLike([updatedLikeInfo.userId]);
+        setLikeIcon(false); // Change the icon to <FcLikePlaceholder />
+        console.log('deleteresponsee', response.data);
+        // Assuming the response.data contains the updated like count
+        const updatedLikeCount = response.data.updatedLikeCount;
+        // Update the like count in your state
+        setLikeCount(updatedLikeCount);
       })
       .catch((error) => {
         console.error('Error disliking post:', error);
@@ -148,7 +152,7 @@ function Post() {
               </div>
               <div className="d-flex">
                 <div className="d-flex justify-content-between">
-                  {like.includes(currentUser.id) ? (
+                  {likeIcon === true ? (
                     <FcLike onClick={handleDislike} />
                   ) : (
                     <FcLikePlaceholder onClick={handleLike} />
