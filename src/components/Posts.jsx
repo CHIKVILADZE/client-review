@@ -44,6 +44,14 @@ function Posts() {
                       <h5 className="card-subtitle mb-2 text-muted">
                         {post.title}
                       </h5>
+                      <div>
+                        {' '}
+                        <img
+                          src={`http://localhost:4000/images/${post.image}`}
+                          alt=""
+                          className="img-fluid"
+                        />
+                      </div>
                     </>
                   )}
                   <p className="card-text">{post.desc}</p>
@@ -53,7 +61,7 @@ function Posts() {
                   <div className="ml-auto">
                     <Link
                       to={`/post/${post.id}`}
-                      className="btn btn-secondary text-white"
+                      className="btn btn-primary text-white"
                     >
                       Review
                     </Link>

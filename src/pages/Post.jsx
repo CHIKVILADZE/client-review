@@ -14,15 +14,14 @@ function Post() {
   const [like, setLike] = useState([]);
   const [likeIds, setLikeIds] = useState([]);
   const [likeIcon, setLikeIcon] = useState(false);
-  const [likeCount, setLikeCount] = useState(null); // Initialize likeIcon as null
+  const [likeCount, setLikeCount] = useState(null);
 
   const { currentUser } = useContext(AuthContext);
 
-  // Function to update the likeIcon state and save it in local storage
-  const updateLikeIcon = (value) => {
-    setLikeIcon(value);
-    localStorage.setItem(`likeIcon_${postId}`, JSON.stringify(value));
-  };
+  // const updateLikeIcon = (value) => {
+  //   setLikeIcon(value);
+  //   localStorage.setItem(`likeIcon_${postId}`, JSON.stringify(value));
+  // };
 
   useEffect(() => {
     const fetchPostAndLikes = async () => {
@@ -84,7 +83,6 @@ function Post() {
         console.error('Error adding comment:', error);
       });
   };
-
   const handleLike = () => {
     axios
       .post(
@@ -126,8 +124,6 @@ function Post() {
         setLike([updatedLikeInfo.userId]);
         setLikeIcon(false);
         console.log('deleteresponsee', response.data);
-        const updatedLikeCount = response.data.updatedLikeCount;
-        setLikeCount(updatedLikeCount);
       })
       .catch((error) => {
         console.error('Error disliking post:', error);
@@ -136,27 +132,29 @@ function Post() {
 
   return (
     <div className="container mt-4">
-      <div className="card w-80 mx-auto">
+      <div className="card w-60 mx-auto">
         <div className="card-body">
           {post ? (
             <>
               <div>
                 <h1 className="card-text">Author: {post.author.firstName}</h1>
                 <h4 className="card-title">Post - {post.title}</h4>
-
+                <div>
+                  <img
+                    src={`http://localhost:4000/images/${post.image}`}
+                    alt=""
+                    className="img-fluid"
+                  />
+                </div>
                 <p className="card-text">{post.desc}</p>
               </div>
-              <div className="d-flex">
-                <div className="d-flex justify-content-between">
-                  {likeIcon === true ? (
-                    <FcLike onClick={handleDislike} />
-                  ) : (
-                    <FcLikePlaceholder onClick={handleLike} />
-                  )}
-
-                  <br />
-                  <span>{like.length} Likes</span>
-                </div>
+              <div className="d-flex justify-content-between">
+                {likeIcon === true ? (
+                  <FcLike onClick={handleDislike} />
+                ) : (
+                  <FcLikePlaceholder onClick={handleLike} />
+                )}
+                <span>{like.length} Likes</span>
               </div>
 
               <div className="card-footer">
