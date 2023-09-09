@@ -47,9 +47,9 @@ function Post() {
         setLike(userIds);
 
         if (userIds.includes(currentUser.id)) {
-          setLikeIcon(true); // User has liked this post
+          setLikeIcon(true);
         } else {
-          setLikeIcon(false); // User has not liked this post
+          setLikeIcon(false);
         }
 
         setIsLoading(false);
@@ -98,12 +98,10 @@ function Post() {
         }
       )
       .then((response) => {
-        // Assuming the response.data contains updated like information
         const updatedLikeInfo = response.data;
 
-        // Update the like state to include the new like
         setLike([...like, updatedLikeInfo.userId]);
-        setLikeIcon(true); // Change the icon to <FcLike />
+        setLikeIcon(true);
       })
       .catch((error) => {
         console.error('Error liking post:', error);
@@ -124,14 +122,11 @@ function Post() {
         withCredentials: true,
       })
       .then((response) => {
-        // Remove the user's like from the like state
         const updatedLikeInfo = response.data;
         setLike([updatedLikeInfo.userId]);
-        setLikeIcon(false); // Change the icon to <FcLikePlaceholder />
+        setLikeIcon(false);
         console.log('deleteresponsee', response.data);
-        // Assuming the response.data contains the updated like count
         const updatedLikeCount = response.data.updatedLikeCount;
-        // Update the like count in your state
         setLikeCount(updatedLikeCount);
       })
       .catch((error) => {
@@ -148,6 +143,7 @@ function Post() {
               <div>
                 <h1 className="card-text">Author: {post.author.firstName}</h1>
                 <h4 className="card-title">Post - {post.title}</h4>
+
                 <p className="card-text">{post.desc}</p>
               </div>
               <div className="d-flex">

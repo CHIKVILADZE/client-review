@@ -1,26 +1,38 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 
 function Profile() {
   const { currentUser } = useContext(AuthContext);
+  const [file, setFile] = useState(null); // Initialize file to null
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
   });
 
+  const handleFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const form = new FormData(); // Create a new FormData object
+
+      // Append the title, desc, and image to the form data
+      form.append('title', formData.title);
+      form.append('desc', formData.desc);
+      form.append('image', file);
+
       const response = await axios.post(
         'http://localhost:4000/api/posts',
+        form, // Send the form data
         {
-          title: formData.title,
-          desc: formData.desc,
-          userId: currentUser.id,
-        },
-        {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+            'Content-Type': 'multipart/form-data',
+          },
           withCredentials: true,
         }
       );
@@ -31,6 +43,9 @@ function Profile() {
         title: '',
         desc: '',
       });
+
+      // Clear the file input
+      setFile(null);
     } catch (error) {
       console.error('Error submitting post:', error);
     }
@@ -78,6 +93,19 @@ function Profile() {
                     value={formData.desc}
                     onChange={handleInputChange}
                   ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="image" className="form-label">
+                    Image
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleFile}
+                  />
                 </div>
                 <button type="submit" className="btn btn-primary">
                   Save Profile
