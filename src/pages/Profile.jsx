@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function Profile() {
   const { currentUser } = useContext(AuthContext);
-  const [file, setFile] = useState(null); // Initialize file to null
+  const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
@@ -15,19 +15,18 @@ function Profile() {
   };
 
   const handleFormSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     try {
-      const form = new FormData(); // Create a new FormData object
+      const form = new FormData();
 
-      // Append the title, desc, and image to the form data
       form.append('title', formData.title);
       form.append('desc', formData.desc);
       form.append('image', file);
 
       const response = await axios.post(
         'http://localhost:4000/api/posts',
-        form, // Send the form data
+        form,
         {
           headers: {
             Authorization: `Bearer ${currentUser.token}`,
@@ -39,13 +38,11 @@ function Profile() {
 
       console.log('Post submission successful:', response.data);
 
+      setFile(null);
       setFormData({
         title: '',
         desc: '',
       });
-
-      // Clear the file input
-      setFile(null);
     } catch (error) {
       console.error('Error submitting post:', error);
     }
@@ -55,7 +52,7 @@ function Profile() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  console.log('filee', file);
   return (
     <div className="container mt-5">
       <div className="row">
@@ -79,6 +76,7 @@ function Profile() {
                     onChange={handleInputChange}
                   />
                 </div>
+
                 <div className="mb-3">
                   <label htmlFor="desc" className="form-label">
                     Description

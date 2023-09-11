@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
+import Search from './Search';
 
 function Posts() {
   const { currentUser } = useContext(AuthContext);
+  const { postId } = useParams();
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState([]);
-
-  const { postId } = useParams();
 
   useEffect(() => {
     setIsLoading(true);
@@ -29,15 +29,16 @@ function Posts() {
         setIsLoading(false);
       });
   }, []);
-
+  console.log('postID', postId);
   return (
     <div>
+      <Search postId={postId} />
       <div className="container my-5" style={{ width: '45%' }}>
         {posts && posts.length > 0 ? (
           <div>
             {posts.map((post) => (
               <div key={post.id} className="card mb-3">
-                <div className="card-body">
+                <div className="card-body text-center">
                   {post.author && (
                     <>
                       <h2 className="card-title">{post.author.firstName}</h2>
@@ -50,6 +51,7 @@ function Posts() {
                           src={`http://localhost:4000/images/${post.image}`}
                           alt=""
                           className="img-fluid"
+                          style={{ width: '90%' }}
                         />
                       </div>
                     </>

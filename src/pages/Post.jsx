@@ -132,7 +132,7 @@ function Post() {
 
   return (
     <div className="container mt-4">
-      <div className="card w-60 mx-auto">
+      <div className="card w-50 mx-auto">
         <div className="card-body">
           {post ? (
             <>
@@ -144,6 +144,7 @@ function Post() {
                     src={`http://localhost:4000/images/${post.image}`}
                     alt=""
                     className="img-fluid"
+                    style={{ width: '90%' }}
                   />
                 </div>
                 <p className="card-text">{post.desc}</p>
