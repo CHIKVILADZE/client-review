@@ -15,6 +15,7 @@ function Post() {
   const [likeIds, setLikeIds] = useState([]);
   const [likeIcon, setLikeIcon] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
+  const [review, setReview] = useState(null);
 
   const { currentUser } = useContext(AuthContext);
 
@@ -26,11 +27,12 @@ function Post() {
   useEffect(() => {
     const fetchPostAndLikes = async () => {
       try {
-        const [postResponse, commentsResponse, likesResponse] =
+        const [postResponse, commentsResponse, likesResponse, reviewsResponse] =
           await Promise.all([
             axios.get(`http://localhost:4000/api/posts/${postId}`),
             axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
             axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/reviews?postId=${postId}`),
           ]);
 
         setPost(postResponse.data);
@@ -44,6 +46,7 @@ function Post() {
         const { likeIds, userIds } = likesResponse.data;
 
         setLike(userIds);
+        setReview(reviewsResponse.data);
 
         if (userIds.includes(currentUser.id)) {
           setLikeIcon(true);
@@ -105,6 +108,8 @@ function Post() {
         console.error('Error liking post:', error);
       });
   };
+  console.log('review', review);
+  console.log('comments', comments);
 
   const handleDislike = () => {
     axios
@@ -130,65 +135,128 @@ function Post() {
       });
   };
 
+  const handleReviewSubmit = () => {
+    axios.post('http://localhost:4000/api/reviews').then((response) => {
+      console.log('reviewssss', response);
+    });
+  };
+
   return (
     <div className="container mt-4">
-      <div className="card w-50 mx-auto">
-        <div className="card-body">
-          {post ? (
-            <>
-              <div>
-                <h1 className="card-text">Author: {post.author.firstName}</h1>
-                <h4 className="card-title">Post - {post.title}</h4>
-                <div>
-                  <img
-                    src={`http://localhost:4000/images/${post.image}`}
-                    alt=""
-                    className="img-fluid"
-                    style={{ width: '90%' }}
-                  />
-                </div>
-                <p className="card-text">{post.desc}</p>
-              </div>
-              <div className="d-flex justify-content-between">
-                {likeIcon === true ? (
-                  <FcLike onClick={handleDislike} />
-                ) : (
-                  <FcLikePlaceholder onClick={handleLike} />
-                )}
-                <span>{like.length} Likes</span>
-              </div>
+      <div className="row">
+        <div className="col-md-8">
+          <div className="card">
+            <div className="card-body">
+              {post ? (
+                <>
+                  <div>
+                    <h2 className="card-title">{post.title}</h2>
+                    <p className="card-text">
+                      Post by:{' '}
+                      <span className="font-weight-bold">
+                        {post.author.firstName}&nbsp;{post.author.lastName}
+                      </span>
+                    </p>
 
-              <div className="card-footer">
-                <div className="addComments">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Write a comment"
-                    value={newComment}
-                    onChange={(event) => {
-                      setNewComment(event.target.value);
-                    }}
-                  />
-                  <button className="btn btn-primary mt-2" onClick={addComment}>
-                    Add
-                  </button>
-                </div>
-              </div>
-              <div className="commentsList">
-                {comments[postId].map((comment, key) => {
-                  return (
-                    <div key={key} className="card mt-2">
-                      <div className="card-body">
-                        <p className="card-text">{comment.text}</p>
-                      </div>
+                    <div>
+                      <img
+                        src={`http://localhost:4000/images/${post.image}`}
+                        alt=""
+                        className="img-fluid"
+                        style={{ width: '90%' }}
+                      />
                     </div>
-                  );
-                })}
-              </div>
-            </>
-          ) : (
-            <div>Loading...</div>
-          )}
+                    <p className="card-text">{post.desc}</p>
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    {likeIcon === true ? (
+                      <FcLike onClick={handleDislike} />
+                    ) : (
+                      <FcLikePlaceholder onClick={handleLike} />
+                    )}
+                    <span>{like.length} Likes</span>
+                  </div>
+
+                  <div className="card-footer">
+                    <div className="addComments">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Write a comment"
+                        value={newComment}
+                        onChange={(event) => {
+                          setNewComment(event.target.value);
+                        }}
+                      />
+                      <button
+                        className="btn btn-primary mt-2"
+                        onClick={addComment}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                  <div className="commentsList">
+                    {comments[postId].map((comment, key) => {
+                      return (
+                        <div key={key} className="card mt-2">
+                          <div className="card-body">
+                            <span className="text-info">
+                              {' '}
+                              {post.author.firstName}&nbsp;
+                              {post.author.lastName}
+                            </span>
+                            <p className="card-text text-dark">
+                              {comment.text}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <div>Loading...</div>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="card">
+            <div className="card-body">
+              <h4>Review</h4>
+              <form>
+                <div className="mb-3">
+                  <div className="d-flex flex-column">
+                    {' '}
+                    <label htmlFor="reviewName">Review Name</label>
+                    {post && <input type="text" value={post.title} />}
+                  </div>
+                  <div className="d-flex flex-column">
+                    {' '}
+                    <label htmlFor="rating" className="form-label">
+                      Rating
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control w-100 custom-input"
+                      name="rating"
+                      id="rating"
+                      min="1"
+                      max="5"
+                      style={{ maxWidth: '200px' }}
+                    />
+                  </div>
+                </div>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleReviewSubmit}
+                >
+                  Submit Review
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

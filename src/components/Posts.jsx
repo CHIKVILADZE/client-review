@@ -41,7 +41,9 @@ function Posts() {
                 <div className="card-body text-center">
                   {post.author && (
                     <>
-                      <h2 className="card-title">{post.author.firstName}</h2>
+                      <h2 className="card-title">
+                        {post.author.firstName}&nbsp;{post.author.lastName}
+                      </h2>
                       <h5 className="card-subtitle mb-2 text-muted">
                         {post.title}
                       </h5>
@@ -56,7 +58,7 @@ function Posts() {
                       </div>
                     </>
                   )}
-                  <p className="card-text">{post.desc}</p>
+                  <p className="card-text mt-4">{post.desc}</p>
                 </div>
 
                 <div className="card-footer d-flex">
