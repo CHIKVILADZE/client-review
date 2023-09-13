@@ -15,7 +15,11 @@ function Post() {
   const [likeIds, setLikeIds] = useState([]);
   const [likeIcon, setLikeIcon] = useState(false);
   const [likeCount, setLikeCount] = useState(null);
-  const [review, setReview] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewName, setReviewName] = useState('');
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewGroup, setReviewGroup] = useState();
 
   const { currentUser } = useContext(AuthContext);
 
@@ -27,13 +31,23 @@ function Post() {
   useEffect(() => {
     const fetchPostAndLikes = async () => {
       try {
-        const [postResponse, commentsResponse, likesResponse, reviewsResponse] =
-          await Promise.all([
-            axios.get(`http://localhost:4000/api/posts/${postId}`),
-            axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
-            axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
-            axios.get(`http://localhost:4000/api/reviews?postId=${postId}`),
-          ]);
+        const [
+          postResponse,
+          commentsResponse,
+          likesResponse,
+          reviewsResponse,
+          moviesResponse,
+          booksResponse,
+          gamesResponse,
+        ] = await Promise.all([
+          axios.get(`http://localhost:4000/api/posts/${postId}`),
+          axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/reviews?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/books?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/games?postId=${postId}`),
+        ]);
 
         setPost(postResponse.data);
         setComments({
@@ -46,7 +60,6 @@ function Post() {
         const { likeIds, userIds } = likesResponse.data;
 
         setLike(userIds);
-        setReview(reviewsResponse.data);
 
         if (userIds.includes(currentUser.id)) {
           setLikeIcon(true);
@@ -108,7 +121,7 @@ function Post() {
         console.error('Error liking post:', error);
       });
   };
-  console.log('review', review);
+  console.log('review', reviews);
   console.log('comments', comments);
 
   const handleDislike = () => {
@@ -134,13 +147,31 @@ function Post() {
         console.error('Error disliking post:', error);
       });
   };
+  console.log('reviewssss', reviews);
 
-  const handleReviewSubmit = () => {
-    axios.post('http://localhost:4000/api/reviews').then((response) => {
-      console.log('reviewssss', response);
-    });
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    let review = {
+      postId: postId,
+      name: post.reviewName,
+      text: reviewText,
+      rating: rating,
+      group: reviewGroup,
+    };
+
+    await axios
+      .post(`http://localhost:4000/api/${reviewGroup}`, review, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log('reviewssss', response);
+      });
   };
+  console.log('reviewGroup', reviewGroup);
 
+  const handleSelectChange = (event) => {
+    setReviewGroup(event.target.value);
+  };
   return (
     <div className="container mt-4">
       <div className="row">
@@ -225,14 +256,32 @@ function Post() {
           <div className="card">
             <div className="card-body">
               <h4>Review</h4>
-              <form>
+              <form onSubmit={handleReviewSubmit}>
                 <div className="mb-3">
                   <div className="d-flex flex-column">
                     {' '}
-                    <label htmlFor="reviewName">Review Name</label>
-                    {post && <input type="text" value={post.title} />}
+                    {post && (
+                      <>
+                        <label htmlFor="reviewName">Review Name</label>
+                        <input type="text" value={post.reviewName} readOnly />
+                        <label htmlFor="reviewGroup" className="mt-2">
+                          Review Group
+                        </label>
+                        <input type="text" value={post.group} readOnly />
+                      </>
+                    )}
                   </div>
-                  <div className="d-flex flex-column">
+
+                  <div className="form-group mt-4">
+                    <label htmlFor="reviewText">Review Text</label>
+                    <textarea
+                      className="form-control mt-2"
+                      id="reviewText"
+                      rows="4"
+                      onChange={(e) => setReviewText(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="d-flex flex-column mt-4">
                     {' '}
                     <label htmlFor="rating" className="form-label">
                       Rating
@@ -242,17 +291,15 @@ function Post() {
                       className="form-control w-100 custom-input"
                       name="rating"
                       id="rating"
+                      onChange={(e) => setRating(e.target.value)}
                       min="1"
                       max="5"
                       style={{ maxWidth: '200px' }}
                     />
                   </div>
                 </div>
-                <button
-                  className="btn btn-primary"
-                  onClick={handleReviewSubmit}
-                >
-                  Submit Review
+                <button className="btn btn-primary" type="submit">
+                  Add Review
                 </button>
               </form>
             </div>

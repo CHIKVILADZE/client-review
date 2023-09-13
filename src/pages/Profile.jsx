@@ -5,6 +5,8 @@ import axios from 'axios';
 function Profile() {
   const { currentUser } = useContext(AuthContext);
   const [file, setFile] = useState(null);
+  const [reviewGroup, setReviewGroup] = useState();
+  const [reviewName, setReviewName] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
@@ -15,13 +17,15 @@ function Profile() {
   };
 
   const handleFormSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     try {
       const form = new FormData();
 
       form.append('title', formData.title);
       form.append('desc', formData.desc);
+      form.append('group', reviewGroup);
+      form.append('reviewName', reviewName);
       form.append('image', file);
 
       const response = await axios.post(
@@ -43,6 +47,8 @@ function Profile() {
         title: '',
         desc: '',
       });
+      setReviewGroup('');
+      setReviewName('');
     } catch (error) {
       console.error('Error submitting post:', error);
     }
@@ -53,6 +59,12 @@ function Profile() {
     setFormData({ ...formData, [name]: value });
   };
   console.log('filee', file);
+
+  const handleSelectChange = (event) => {
+    setReviewGroup(event.target.value);
+  };
+  console.log('reviewGroup', reviewGroup);
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -60,6 +72,7 @@ function Profile() {
           <div className="card bg-info">
             <div className="card-body">
               <h5 className="card-title">Profile</h5>
+
               <form onSubmit={handleFormSubmit}>
                 <div className="mb-3">
                   <label htmlFor="title" className="form-label">
@@ -76,8 +89,34 @@ function Profile() {
                     onChange={handleInputChange}
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="group">Group</label>
+                  <select
+                    name="group"
+                    id="group"
+                    className="form-control"
+                    value={formData.group}
+                    onChange={handleSelectChange}
+                  >
+                    <option value="">Select group</option>
+                    <option value="Mvies">Movie</option>
+                    <option value="Books">Book</option>
+                    <option value="Games">Game</option>
+                  </select>
+                </div>
+                <div className="d-flex flex-column mt-4">
+                  <input
+                    type="text"
+                    placeholder="Enter Review Name"
+                    required
+                    className="form-control rounded-lg"
+                    name="reviewName"
+                    onChange={(e) => setReviewName(e.target.value)}
+                    value={formData.reviewName}
+                  />
+                </div>
 
-                <div className="mb-3">
+                <div className="mb-3 mt-2">
                   <label htmlFor="desc" className="form-label">
                     Description
                   </label>
@@ -106,7 +145,7 @@ function Profile() {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                  Save Profile
+                  Submit Post
                 </button>
               </form>
             </div>
