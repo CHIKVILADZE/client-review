@@ -99,7 +99,7 @@ function Profile() {
                     onChange={handleSelectChange}
                   >
                     <option value="">Select group</option>
-                    <option value="Mvies">Movie</option>
+                    <option value="Movies">Movie</option>
                     <option value="Books">Book</option>
                     <option value="Games">Game</option>
                   </select>

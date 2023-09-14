@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 import { AuthContext } from '../context/authContext';
+import { AiFillStar } from 'react-icons/ai';
 
 function Post() {
   const { postId } = useParams();
@@ -17,11 +18,12 @@ function Post() {
   const [likeCount, setLikeCount] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [reviewName, setReviewName] = useState('');
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState([]);
   const [reviewText, setReviewText] = useState('');
-  const [reviewGroup, setReviewGroup] = useState();
-
+  const [reviewGroup, setReviewGroup] = useState('');
+  const [sumRating, setSumRating] = useState(0);
   const { currentUser } = useContext(AuthContext);
+  const [avarageRating, setAvarageRating] = useState(0);
 
   // const updateLikeIcon = (value) => {
   //   setLikeIcon(value);
@@ -59,7 +61,41 @@ function Post() {
 
         const { likeIds, userIds } = likesResponse.data;
 
+        // Define matchingPosts outside of the conditionals
+        let matchingPosts = [];
+
+        if (postResponse.data.group === 'Movies') {
+          matchingPosts = moviesResponse.data.filter(
+            (movie) => movie.postId === postId
+          );
+        } else if (postResponse.data.group === 'Books') {
+          matchingPosts = booksResponse.data.filter(
+            (book) => book.postId === postId
+          );
+        } else if (postResponse.data.group === 'games') {
+          matchingPosts = gamesResponse.data.filter(
+            (game) => game.postId === postId
+          );
+        }
+
+        const sumOfRatings = matchingPosts.reduce((acc, post) => {
+          return acc + (parseFloat(post.rating) || 0);
+        }, 0);
+
+        setSumRating(sumOfRatings);
+
+        // calculate avarage ratings for start
+        const avarageRatings = sumOfRatings / matchingPosts.length / 2;
+        const roundedAverageRating = Math.round(avarageRatings);
+        setAvarageRating(roundedAverageRating);
+
+        console.log('SUMmm', sumOfRatings);
+        console.log('MATChingpooost', matchingPosts);
+        console.log('avarageeee', roundedAverageRating);
+
         setLike(userIds);
+
+        setReviewGroup(postResponse.data.group);
 
         if (userIds.includes(currentUser.id)) {
           setLikeIcon(true);
@@ -121,9 +157,6 @@ function Post() {
         console.error('Error liking post:', error);
       });
   };
-  console.log('review', reviews);
-  console.log('comments', comments);
-
   const handleDislike = () => {
     axios
       .delete('http://localhost:4000/api/likes', {
@@ -147,7 +180,6 @@ function Post() {
         console.error('Error disliking post:', error);
       });
   };
-  console.log('reviewssss', reviews);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -172,6 +204,7 @@ function Post() {
   const handleSelectChange = (event) => {
     setReviewGroup(event.target.value);
   };
+
   return (
     <div className="container mt-4">
       <div className="row">
@@ -181,7 +214,20 @@ function Post() {
               {post ? (
                 <>
                   <div>
-                    <h2 className="card-title">{post.title}</h2>
+                    <h2 className="card-title">{post.title} </h2>
+                    <div>
+                      {[...Array(5)].map((_, index) => (
+                        <AiFillStar
+                          key={index}
+                          size={25}
+                          className={
+                            index < avarageRating
+                              ? 'text-warning'
+                              : 'text-secondary'
+                          }
+                        />
+                      ))}
+                    </div>
                     <p className="card-text">
                       Post by:{' '}
                       <span className="font-weight-bold">
@@ -292,8 +338,9 @@ function Post() {
                       name="rating"
                       id="rating"
                       onChange={(e) => setRating(e.target.value)}
-                      min="1"
-                      max="5"
+                      min="0"
+                      max="10"
+                      placeholder="0-10"
                       style={{ maxWidth: '200px' }}
                     />
                   </div>
