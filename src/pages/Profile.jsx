@@ -32,10 +32,6 @@ function Profile() {
         'http://localhost:4000/api/posts',
         form,
         {
-          headers: {
-            Authorization: `Bearer ${currentUser.token}`,
-            'Content-Type': 'multipart/form-data',
-          },
           withCredentials: true,
         }
       );

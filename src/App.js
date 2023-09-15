@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
+import Reviews from './pages/Reviews';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/post/:postId" element={<Post />} />
+          <Route path="/reviews/:postId" element={<Reviews />} />
         </Routes>
       </BrowserRouter>
     </>

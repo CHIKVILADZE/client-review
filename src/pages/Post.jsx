@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 import { AuthContext } from '../context/authContext';
 import { AiFillStar } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 function Post() {
   const { postId } = useParams();
@@ -380,6 +381,7 @@ function Post() {
               </form>
             </div>
           </div>
+          <Link to={`/reviews/${postId}`}>All review</Link>
         </div>
       </div>
     </div>
