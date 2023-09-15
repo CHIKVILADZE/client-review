@@ -191,18 +191,45 @@ function Post() {
       group: reviewGroup,
     };
 
-    await axios
-      .post(`http://localhost:4000/api/${reviewGroup}`, review, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log('reviewssss', response);
-      });
-  };
-  console.log('reviewGroup', reviewGroup);
+    try {
+      // Send the review data to your API
+      const response = await axios.post(
+        `http://localhost:4000/api/${reviewGroup}`,
+        review,
+        {
+          withCredentials: true,
+        }
+      );
 
-  const handleSelectChange = (event) => {
-    setReviewGroup(event.target.value);
+      // Assuming your API returns the updated post with the new review
+      const updatedPost = response.data;
+
+      // Calculate the updated average rating
+
+      // Now, send a POST request to update the 'sumRating' field of the post
+      // Update the post data with the new 'sumRating'
+      const updatedPostData = {
+        ...post,
+        sumRating: avarageRating.toString(),
+      };
+
+      // Send the updated post data to the '/api/posts' endpoint
+      await axios.put(
+        `http://localhost:4000/api/posts/${postId}`,
+        updatedPostData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      // Clear the form fields
+      setReviewText('');
+      setRating('');
+
+      console.log('Review added successfully:', response);
+    } catch (error) {
+      console.error('Error adding review:', error);
+    }
   };
 
   return (
@@ -324,6 +351,7 @@ function Post() {
                       className="form-control mt-2"
                       id="reviewText"
                       rows="4"
+                      value={reviewText}
                       onChange={(e) => setReviewText(e.target.value)}
                     ></textarea>
                   </div>
@@ -337,6 +365,7 @@ function Post() {
                       className="form-control w-100 custom-input"
                       name="rating"
                       id="rating"
+                      value={rating}
                       onChange={(e) => setRating(e.target.value)}
                       min="0"
                       max="10"
