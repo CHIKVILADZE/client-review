@@ -62,7 +62,6 @@ function Post() {
 
         const { likeIds, userIds } = likesResponse.data;
 
-        // Define matchingPosts outside of the conditionals
         let matchingPosts = [];
 
         if (postResponse.data.group === 'Movies') {
@@ -85,7 +84,6 @@ function Post() {
 
         setSumRating(sumOfRatings);
 
-        // calculate avarage ratings for start
         const avarageRatings = sumOfRatings / matchingPosts.length / 2;
         const roundedAverageRating = Math.round(avarageRatings);
         setAvarageRating(roundedAverageRating);
@@ -193,7 +191,6 @@ function Post() {
     };
 
     try {
-      // Send the review data to your API
       const response = await axios.post(
         `http://localhost:4000/api/${reviewGroup}`,
         review,
@@ -202,19 +199,13 @@ function Post() {
         }
       );
 
-      // Assuming your API returns the updated post with the new review
       const updatedPost = response.data;
 
-      // Calculate the updated average rating
-
-      // Now, send a POST request to update the 'sumRating' field of the post
-      // Update the post data with the new 'sumRating'
       const updatedPostData = {
         ...post,
         sumRating: avarageRating.toString(),
       };
 
-      // Send the updated post data to the '/api/posts' endpoint
       await axios.put(
         `http://localhost:4000/api/posts/${postId}`,
         updatedPostData,
@@ -223,7 +214,6 @@ function Post() {
         }
       );
 
-      // Clear the form fields
       setReviewText('');
       setRating('');
 

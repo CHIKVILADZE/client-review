@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Posts from '../components/Posts';
 import PopularTags from '../components/PopularTags';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function Home() {
   return (

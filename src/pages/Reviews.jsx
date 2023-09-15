@@ -7,6 +7,7 @@ function Reviews() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [postData, setPostData] = useState([]);
+  const [starsRating, setStarsRating] = useState('');
 
   useEffect(() => {
     const fetchPostAndData = async () => {
@@ -64,7 +65,6 @@ function Reviews() {
           console.error('Data not found for the specified group');
         }
 
-        // Set the post in state
         setPost(post);
       } catch (error) {
         console.error(error);
@@ -73,6 +73,7 @@ function Reviews() {
 
     fetchPostAndData();
   }, []);
+  console.log('rating', starsRating);
 
   return (
     <div className="container mt-4">
