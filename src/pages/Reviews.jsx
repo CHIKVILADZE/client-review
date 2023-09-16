@@ -1,7 +1,8 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { AiFillStar } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import PDFFile from '../components/PDFFile';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 function Reviews({ t }) {
   const { postId } = useParams();
@@ -12,23 +13,13 @@ function Reviews({ t }) {
   useEffect(() => {
     const fetchPostAndData = async () => {
       try {
-        const [
-          postResponse,
-          commentsResponse,
-          likesResponse,
-          reviewsResponse,
-          moviesResponse,
-          booksResponse,
-          gamesResponse,
-        ] = await Promise.all([
-          axios.get(`http://localhost:4000/api/posts/${postId}`),
-          axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/reviews?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/books?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/games?postId=${postId}`),
-        ]);
+        const [postResponse, moviesResponse, booksResponse, gamesResponse] =
+          await Promise.all([
+            axios.get(`http://localhost:4000/api/posts/${postId}`),
+            axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/books?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/games?postId=${postId}`),
+          ]);
 
         if (!postResponse || !postResponse.data) {
           console.error('Post data not found');
@@ -74,6 +65,7 @@ function Reviews({ t }) {
     fetchPostAndData();
   }, []);
   console.log('rating', starsRating);
+  console.log('post', post);
 
   return (
     <div className="container mt-4">
@@ -113,6 +105,18 @@ function Reviews({ t }) {
               </li>
             ))}
           </ul>
+          <PDFDownloadLink
+            document={<PDFFile post={post} t={t} postData={postData} />}
+            fileName="Form"
+          >
+            {({ loading }) =>
+              loading ? (
+                <button>Loading Document...</button>
+              ) : (
+                <button>Download PDF</button>
+              )
+            }
+          </PDFDownloadLink>
         </div>
       )}
     </div>
