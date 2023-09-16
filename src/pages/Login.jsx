@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
+import { t } from 'i18next';
 
-export default function Login() {
+export default function Login({ t }) {
   const [inputs, setInputs] = useState({
     username: '',
     password: '',
@@ -37,7 +38,7 @@ export default function Login() {
     <div className="container">
       <div className="row justify-content-center ">
         <div className="col-md-6">
-          <h1 className="mb-4">Login</h1>
+          <h1 className="mb-4">{t('home.login')}</h1>
           <form>
             <div className="mb-3">
               <input
@@ -65,7 +66,7 @@ export default function Login() {
               className="btn btn-primary"
               onClick={handleLogin}
             >
-              Login
+              {t('home.login')}
             </button>
           </form>
           <div className="col-4">

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
-function Register() {
+function Register({ t }) {
   const [inputs, setInputs] = useState({
     firstName: '',
     lastName: '',
@@ -34,7 +34,7 @@ function Register() {
     <div className="container">
       <div className="row justify-content-center ">
         <div className="col-md-6">
-          <h1 className="mb-4">Register</h1>
+          <h1 className="mb-4">{t('home.register')}</h1>
           <form>
             <div className="mb-3">
               <input

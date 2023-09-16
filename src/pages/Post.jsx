@@ -6,7 +6,7 @@ import { AuthContext } from '../context/authContext';
 import { AiFillStar } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
-function Post() {
+function Post({ t }) {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState({});
@@ -247,7 +247,7 @@ function Post() {
                       ))}
                     </div>
                     <p className="card-text">
-                      Post by:{' '}
+                      {t('post.postBy')}:&nbsp;
                       <span className="font-weight-bold">
                         {post.author.firstName}&nbsp;{post.author.lastName}
                       </span>
@@ -287,7 +287,7 @@ function Post() {
                         className="btn btn-primary mt-2"
                         onClick={addComment}
                       >
-                        Add
+                        {t('post.addComment')}
                       </button>
                     </div>
                   </div>
@@ -319,17 +319,20 @@ function Post() {
         <div className="col-md-4">
           <div className="card">
             <div className="card-body">
-              <h4>Review</h4>
+              <h4> {t('post.review')}</h4>
               <form onSubmit={handleReviewSubmit}>
                 <div className="mb-3">
                   <div className="d-flex flex-column">
                     {' '}
                     {post && (
                       <>
-                        <label htmlFor="reviewName">Review Name</label>
+                        <label htmlFor="reviewName">
+                          {' '}
+                          {t('post.reviewName')}
+                        </label>
                         <input type="text" value={post.reviewName} readOnly />
                         <label htmlFor="reviewGroup" className="mt-2">
-                          Review Group
+                          {t('post.reviewGroup')}
                         </label>
                         <input type="text" value={post.group} readOnly />
                       </>
@@ -337,7 +340,7 @@ function Post() {
                   </div>
 
                   <div className="form-group mt-4">
-                    <label htmlFor="reviewText">Review Text</label>
+                    <label htmlFor="reviewText"> {t('post.reviewText')}</label>
                     <textarea
                       className="form-control mt-2"
                       id="reviewText"
@@ -349,7 +352,7 @@ function Post() {
                   <div className="d-flex flex-column mt-4">
                     {' '}
                     <label htmlFor="rating" className="form-label">
-                      Rating
+                      {t('post.rating')}
                     </label>
                     <input
                       type="number"
@@ -366,12 +369,12 @@ function Post() {
                   </div>
                 </div>
                 <button className="btn btn-primary" type="submit">
-                  Add Review
+                  {t('post.addReview')}{' '}
                 </button>
               </form>
             </div>
           </div>
-          <Link to={`/reviews/${postId}`}>All review</Link>
+          <Link to={`/reviews/${postId}`}> {t('post.allReview')} </Link>
         </div>
       </div>
     </div>

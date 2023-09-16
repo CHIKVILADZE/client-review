@@ -3,12 +3,10 @@ import { AuthContext } from '../context/authContext';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import Search from './Search';
-import { useTranslation } from 'react-i18next';
 
-function Posts() {
+function Posts({ t, handleChangeLanguage }) {
   const { currentUser } = useContext(AuthContext);
   const { postId } = useParams();
-  const [t, i18next] = useTranslation('global');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -32,17 +30,10 @@ function Posts() {
   }, []);
   console.log('postID', postId);
 
-  const handleChangeLanguage = (lang) => {
-    i18next.changeLanguage(lang);
-  };
-
   return (
     <div>
       <Search postId={postId} />
-      <div>
-        <button onClick={() => handleChangeLanguage('en')}>En</button>
-        <button onClick={() => handleChangeLanguage('ge')}>Ge</button>
-      </div>
+
       <div className="container my-5" style={{ width: '45%' }}>
         {posts && posts.length > 0 ? (
           <div>

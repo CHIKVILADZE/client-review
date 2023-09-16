@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { useParams } from 'react-router-dom';
 
-function Reviews() {
+function Reviews({ t }) {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [postData, setPostData] = useState([]);
@@ -91,14 +91,15 @@ function Reviews() {
 
           <p>
             <span className="text-muted">
-              Posted By: {post.author.firstName} {post.author.lastName} <br />
+              {t('reviews.postBy')}: {post.author.firstName}{' '}
+              {post.author.lastName} <br />
             </span>
           </p>
         </div>
       )}
       {postData.length > 0 && (
         <div>
-          <h3 className="mt-4">Review Data:</h3>
+          <h3 className="mt-4">{t('reviews.reviewData')}</h3>
           <ul className="list-group">
             {postData.map((data, index) => (
               <li key={index} className="list-group-item">

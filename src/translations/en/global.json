@@ -1,8 +1,28 @@
 {
-  "header": {
-    "messages": "Welcome to pet store deluxe"
+  "navbar": {
+    "homeLink": "Review Platform",
+    "login": "Log In",
+    "logout": "Log Out"
   },
   "home": {
-    "body": "Review"
+    "body": "Review",
+    "register": "Register",
+    "login": "Login",
+    "popularPosts": "Popular Reviews"
+  },
+  "post": {
+    "postBy": "Post by",
+    "addComment": "Add Comment",
+    "review": "Review",
+    "reviewName": "Review Name",
+    "reviewGroup": "Review Group",
+    "reviewText": "Review Text",
+    "rating": "Rating",
+    "addReview": "Add Review",
+    "allReview": "All Review"
+  },
+  "reviews": {
+    "postBy": "Post by",
+    "reviewData": "Reviews Data"
   }
 }

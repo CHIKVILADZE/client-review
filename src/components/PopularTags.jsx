@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-function PopularTags() {
+function PopularTags({ t }) {
   const [popularReviews, setPopularReviews] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function PopularTags() {
 
   return (
     <div className="popular-tags">
-      <h5 className="mb-3"> Popular Reviews</h5>
+      <h5 className="mb-3">{t('home.popularPosts')} </h5>
       <ul className="list-group">
         {popularReviews.map((post) => (
           <Link
