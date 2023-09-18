@@ -83,7 +83,7 @@ function PDFFile({ post, t, postData }) {
         {postData.map((data, index) => (
           <View key={index} style={styles.reviewItem}>
             <Text style={styles.authorName}>
-              {post.author.firstName} {post.author.lastName}
+              {data.author.firstName} {data.author.lastName}
             </Text>
             <Text>{data.text}</Text>
             <Text style={styles.rating}>{`Rating: ${data.rating}`}</Text>

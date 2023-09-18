@@ -46,15 +46,19 @@ function GlobalSearch() {
 
     const formattedResults = searchResults.map((result) => {
       const { item } = result;
-
       if (item.type === 'post') {
+        console.log('item typee', item.type);
+
         return {
           id: item.id,
           title: item.title,
           desc: item.desc,
+          reviewName: item.reviewName,
           link: `/post/${item.id}`,
         };
       } else if (item.type === 'comment') {
+        console.log('item typee', item.type);
+
         return {
           id: item.id,
           title: item.text,
@@ -68,7 +72,6 @@ function GlobalSearch() {
     setResults(formattedResults);
     setShowSuggestions(searchTerm !== '');
   };
-  console.log(results);
 
   return (
     <div className="container mt-4">
@@ -109,6 +112,8 @@ function GlobalSearch() {
                       </h6>
                       <p className="text-black">{result.title}</p>
                       <span className="text-grey">{result.desc}</span>
+                      <br />
+                      <span className="text-grey">{result.reviewName}</span>
                     </>
                   )}
                 </Link>

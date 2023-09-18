@@ -27,6 +27,14 @@ function Profile() {
       form.append('group', reviewGroup);
       form.append('reviewName', reviewName);
       form.append('image', file);
+      form.append('userId', currentUser.id);
+      form.append(
+        'author',
+        JSON.stringify({
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+        })
+      );
 
       const response = await axios.post(
         'http://localhost:4000/api/posts',
@@ -49,6 +57,7 @@ function Profile() {
       console.error('Error submitting post:', error);
     }
   };
+  console.log('currentUser', currentUser);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

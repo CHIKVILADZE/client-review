@@ -32,6 +32,10 @@ function Post({ t }) {
   // };
 
   useEffect(() => {
+    console.log('like', like);
+  }, [like]);
+
+  useEffect(() => {
     const fetchPostAndLikes = async () => {
       try {
         const [
@@ -111,12 +115,19 @@ function Post({ t }) {
     };
 
     fetchPostAndLikes();
-  }, [postId, currentUser.id]);
+  }, [postId, currentUser]);
 
   const addComment = () => {
+    const { id, firstName, lastName } = currentUser; // Use the user's ID
+
     const requestData = {
       text: newComment,
       postId: postId,
+      userId: id,
+      author: {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+      },
     };
 
     axios
@@ -126,7 +137,10 @@ function Post({ t }) {
       .then((response) => {
         setComments({
           ...comments,
-          [postId]: [...comments[postId], { text: newComment }],
+          [postId]: [
+            ...comments[postId],
+            { text: newComment, author: { firstName, lastName } },
+          ],
         });
         setNewComment('');
       })
@@ -150,6 +164,7 @@ function Post({ t }) {
         const updatedLikeInfo = response.data;
 
         setLike([...like, updatedLikeInfo.userId]);
+        console.log('HANDLEALIKEE', like);
         setLikeIcon(true);
       })
       .catch((error) => {
@@ -171,8 +186,11 @@ function Post({ t }) {
       })
       .then((response) => {
         const updatedLikeInfo = response.data;
-        setLike([updatedLikeInfo.userId]);
+        console.log('updateee', updatedLikeInfo);
+        setLike([updatedLikeInfo]);
+
         setLikeIcon(false);
+
         console.log('deleteresponsee', response.data);
       })
       .catch((error) => {
@@ -183,11 +201,16 @@ function Post({ t }) {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     let review = {
+      userId: currentUser.id,
       postId: postId,
       name: post.reviewName,
       text: reviewText,
       rating: rating,
       group: reviewGroup,
+      author: {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+      },
     };
 
     try {
@@ -222,6 +245,12 @@ function Post({ t }) {
       console.error('Error adding review:', error);
     }
   };
+  // const firstNames =
+  //   comments && comments.length > 0
+  //     ? comments.map((comment) => comment.author.firstName)
+  //     : [];
+
+  console.log('Comments firstName', comments);
 
   return (
     <div className="container mt-4">
@@ -298,8 +327,8 @@ function Post({ t }) {
                           <div className="card-body">
                             <span className="text-info">
                               {' '}
-                              {post.author.firstName}&nbsp;
-                              {post.author.lastName}
+                              {comment.author.firstName}&nbsp;
+                              {comment.author.lastName}
                             </span>
                             <p className="card-text text-dark">
                               {comment.text}

@@ -1,14 +1,16 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PDFFile from '../components/PDFFile';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { AuthContext } from '../context/authContext';
 
 function Reviews({ t }) {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [postData, setPostData] = useState([]);
   const [starsRating, setStarsRating] = useState('');
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPostAndData = async () => {
@@ -65,7 +67,8 @@ function Reviews({ t }) {
     fetchPostAndData();
   }, []);
   console.log('rating', starsRating);
-  console.log('post', post);
+  console.log('postDAtaa', postData);
+  console.log('current usssssss', currentUser);
 
   return (
     <div className="container mt-4">
@@ -96,7 +99,7 @@ function Reviews({ t }) {
             {postData.map((data, index) => (
               <li key={index} className="list-group-item">
                 <h6>
-                  {post.author.firstName} {post.author.lastName}{' '}
+                  {data.author.firstName} {data.author.lastName}{' '}
                   <span className="text-secondary">
                     - Rating: {data.rating}
                   </span>

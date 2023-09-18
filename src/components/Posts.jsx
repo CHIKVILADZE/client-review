@@ -29,6 +29,7 @@ function Posts({ t, handleChangeLanguage }) {
       });
   }, []);
   console.log('postID', postId);
+  console.log('currentUser', currentUser);
 
   return (
     <div>

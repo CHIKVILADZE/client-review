@@ -70,7 +70,10 @@ export default function Login({ t }) {
             </button>
           </form>
           <div className="col-4">
-            <div className="btn btn-secondary mt-3" onClick={googleButton}>
+            <div
+              className="btn btn-secondary mt-3"
+              onClick={(login) => googleButton(login)}
+            >
               Sith In With Google
             </div>
             <div className="btn btn-secondary mt-3" onClick={githubButton}>
