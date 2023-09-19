@@ -10,6 +10,7 @@ import Reviews from './pages/Reviews';
 import { useTranslation } from 'react-i18next';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import Quixote from './pages/Reviews';
+import UserPage from './pages/UserPage';
 
 function App() {
   const [t, i18next] = useTranslation('global');
@@ -30,6 +31,7 @@ function App() {
           <Route path="/profile" element={<Profile t={t} />} />
           <Route path="/post/:postId" element={<Post t={t} />} />
           <Route path="/reviews/:postId" element={<Quixote t={t} />} />
+          <Route path="/userpage/:postId" element={<UserPage t={t} />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -43,10 +43,13 @@ function Posts({ t, handleChangeLanguage }) {
                 <div className="card-body text-center">
                   {post.author && (
                     <>
-                      <h2 className="card-title">
+                      <Link
+                        to={`/userpage/${post.id}`}
+                        className="text-decoration-none fs-5 text-primary"
+                      >
                         {post.author.firstName}&nbsp;{post.author.lastName}
-                      </h2>
-                      <h5 className="card-subtitle mb-2 text-muted">
+                      </Link>
+                      <h5 className="card-subtitle mb-2 text-muted mt-2">
                         {post.title}
                       </h5>
                       <div>

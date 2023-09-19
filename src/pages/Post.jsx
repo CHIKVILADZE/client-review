@@ -118,7 +118,7 @@ function Post({ t }) {
   }, [postId, currentUser]);
 
   const addComment = () => {
-    const { id, firstName, lastName } = currentUser; // Use the user's ID
+    const { id, firstName, lastName } = currentUser;
 
     const requestData = {
       text: newComment,

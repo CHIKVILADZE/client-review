@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import axios from 'axios';
+import MyProfile from '../components/MyProfile';
 
 function Profile() {
   const { currentUser } = useContext(AuthContext);
@@ -157,6 +158,7 @@ function Profile() {
           </div>
         </div>
       </div>
+      <MyProfile />
     </div>
   );
 }
