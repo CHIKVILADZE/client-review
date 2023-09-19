@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 
-function MyProfile() {
+function MyProfile({ t }) {
   const [posts, setPosts] = useState([]);
   const { postId } = useParams();
   const { currentUser } = useContext(AuthContext);
@@ -20,13 +20,40 @@ function MyProfile() {
     fetchPosts();
   }, []);
 
-  const currentPost = posts.find((post) => post.id === postId);
+  const currentUserId = currentUser ? currentUser.id : null;
 
-  console.log('currentUser10000', currentPost);
+  const userPosts = posts.filter((post) => post.authorId === currentUserId);
 
   return (
-    <div>
-      <h1>MyPosts</h1>
+    <div className="border-bottom">
+      <h1>My Posts</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>{t('profile.title')}</th>
+            <th>{t('profile.group')}</th>
+            <th>{t('profile.reviewName')}</th>
+            <th> {t('profile.createdAt')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userPosts.map((post, index) => (
+            <tr key={post.id}>
+              <td>{post.title}</td>
+              <td>{post.group}</td>
+              <td>{post.reviewName}</td> <td>{post.createdAt}</td>
+              <div className="button-group d-flex gap-1">
+                <Link to={`/post/${post.id}`}>
+                  {' '}
+                  <button className="btn btn-info mr-2">Read</button>
+                </Link>
+                <button className="btn btn-warning mr-2">Edit</button>
+                <button className="btn btn-danger">Delete</button>
+              </div>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

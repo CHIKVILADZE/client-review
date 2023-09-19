@@ -3,7 +3,7 @@ import { AuthContext } from '../context/authContext';
 import axios from 'axios';
 import MyProfile from '../components/MyProfile';
 
-function Profile() {
+function Profile({ t }) {
   const { currentUser } = useContext(AuthContext);
   const [file, setFile] = useState(null);
   const [reviewGroup, setReviewGroup] = useState();
@@ -72,9 +72,9 @@ function Profile() {
   console.log('reviewGroup', reviewGroup);
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid mt-5 p-2">
       <div className="row">
-        <div className="col-md-6 mx-auto">
+        <div className="col-md-5 mx-auto">
           <div className="card bg-info">
             <div className="card-body">
               <h5 className="card-title">Profile</h5>
@@ -100,6 +100,7 @@ function Profile() {
                   <select
                     name="group"
                     id="group"
+                    required
                     className="form-control"
                     value={formData.group}
                     onChange={handleSelectChange}
@@ -157,8 +158,11 @@ function Profile() {
             </div>
           </div>
         </div>
+        <div className="col-md-7">
+          {' '}
+          <MyProfile t={t} />
+        </div>
       </div>
-      <MyProfile />
     </div>
   );
 }

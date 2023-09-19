@@ -24,5 +24,12 @@
   "reviews": {
     "postBy": "Post by",
     "reviewData": "Reviews Data"
+  },
+  "profile": {
+    "myPosts": "My Posts",
+    "title": "Title",
+    "group": "Group",
+    "reviewName": "Review Name",
+    "createdAt": "Created At"
   }
 }

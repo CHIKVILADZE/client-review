@@ -27,6 +27,10 @@ function TextLink({ t, handleChangeLanguage }) {
             <Button variant="light" onClick={() => handleChangeLanguage('ge')}>
               Ge
             </Button>
+            <Link to="/dashboard" className="mr-1">
+              <button>Admin</button>
+            </Link>{' '}
+            &nbsp;
             {currentUser && currentUser.firstName ? (
               <div className="d-flex align-items-center">
                 <Link to="/profile" className="nav-link">
