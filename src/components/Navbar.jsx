@@ -3,9 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { AuthContext } from '../context/authContext';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-function TextLink({ t, handleChangeLanguage }) {
+function TextLink({ t, handleChangeLanguage, currentUserId }) {
   const { currentUser } = useContext(AuthContext);
   const handleLogout = async () => {
     localStorage.clear();
@@ -27,7 +27,7 @@ function TextLink({ t, handleChangeLanguage }) {
             <Button variant="light" onClick={() => handleChangeLanguage('ge')}>
               Ge
             </Button>
-            <Link to="/dashboard" className="mr-1">
+            <Link to={`/dashboard/${currentUserId}`} className="mr-1">
               <button>Admin</button>
             </Link>{' '}
             &nbsp;

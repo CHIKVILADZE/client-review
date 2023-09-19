@@ -34,6 +34,7 @@ function MyProfile({ t }) {
             <th>{t('profile.group')}</th>
             <th>{t('profile.reviewName')}</th>
             <th> {t('profile.createdAt')}</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -41,15 +42,17 @@ function MyProfile({ t }) {
             <tr key={post.id}>
               <td>{post.title}</td>
               <td>{post.group}</td>
-              <td>{post.reviewName}</td> <td>{post.createdAt}</td>
-              <div className="button-group d-flex gap-1">
-                <Link to={`/post/${post.id}`}>
-                  {' '}
-                  <button className="btn btn-info mr-2">Read</button>
-                </Link>
-                <button className="btn btn-warning mr-2">Edit</button>
-                <button className="btn btn-danger">Delete</button>
-              </div>
+              <td>{post.reviewName}</td>
+              <td>{post.createdAt}</td>
+              <td>
+                <div className="button-group d-flex gap-1">
+                  <Link to={`/post/${post.id}`}>
+                    <button className="btn btn-info mr-2">Read</button>
+                  </Link>
+                  <button className="btn btn-warning mr-2">Edit</button>
+                  <button className="btn btn-danger">Delete</button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

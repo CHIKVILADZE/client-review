@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -8,21 +8,28 @@ import Profile from './pages/Profile';
 import Post from './pages/Post';
 import Reviews from './pages/Reviews';
 import { useTranslation } from 'react-i18next';
-import Quixote from './pages/Reviews';
 import UserPage from './pages/UserPage';
 import Dashboard from './pages/Dashboard';
+import { useContext } from 'react';
+import { AuthContext } from './context/authContext';
 
 function App() {
   const [t, i18next] = useTranslation('global');
-
+  const { currentUser } = useContext(AuthContext);
+  const currentUserId = currentUser ? currentUser.id : null;
   const handleChangeLanguage = (lang) => {
     i18next.changeLanguage(lang);
   };
+  console.log('mainCUrrentUser', currentUserId);
 
   return (
     <>
       <BrowserRouter>
-        <Navbar t={t} handleChangeLanguage={handleChangeLanguage} />
+        <Navbar
+          t={t}
+          handleChangeLanguage={handleChangeLanguage}
+          currentUserId={currentUserId}
+        />
 
         <Routes>
           <Route path="/" element={<Home t={t} />} />
@@ -32,7 +39,10 @@ function App() {
           <Route path="/post/:postId" element={<Post t={t} />} />
           <Route path="/reviews/:postId" element={<Reviews t={t} />} />
           <Route path="/userpage/:postId" element={<UserPage t={t} />} />
-          <Route path="/dashboard/" element={<Dashboard t={t} />} />
+          <Route
+            path="/dashboard/:currentUserId"
+            element={<Dashboard t={t} />}
+          />
         </Routes>
       </BrowserRouter>
     </>
