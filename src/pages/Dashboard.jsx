@@ -5,13 +5,22 @@ import axios from 'axios';
 function Dashboard() {
   const { currentUserId } = useParams();
   const [users, setUsers] = useState([]);
-  const [makeAdmin, setMakeAdmin] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get('http://localhost:4000/api/users');
-        setUsers(response.data);
+        console.log('Users Data:', response.data);
+
+        const savedIsBlockedValues =
+          JSON.parse(localStorage.getItem('isBlockedValues')) || {};
+
+        const updatedUsers = response.data.map((user) => ({
+          ...user,
+          isBlocked: savedIsBlockedValues[user.id] || false,
+        }));
+
+        setUsers(updatedUsers);
       } catch (err) {
         console.error('Error', err);
       }
@@ -68,6 +77,86 @@ function Dashboard() {
       });
   };
 
+  const handleBlockUser = (userIdToBlock) => {
+    axios
+      .put(
+        `http://localhost:4000/api/users/${userIdToBlock}/block`,
+        {
+          isBlocked: true,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setUsers((prevUsers) =>
+            prevUsers.map((user) => {
+              if (user.id === userIdToBlock) {
+                const updatedUser = { ...user, isBlocked: true };
+                const savedIsBlockedValues =
+                  JSON.parse(localStorage.getItem('isBlockedValues')) || {};
+                savedIsBlockedValues[userIdToBlock] = true;
+                localStorage.setItem(
+                  'isBlockedValues',
+                  JSON.stringify(savedIsBlockedValues)
+                );
+                return updatedUser;
+              } else {
+                return user;
+              }
+            })
+          );
+          console.log(`Blocked User ${userIdToBlock}`, res.data);
+        } else {
+          console.error(`Error blocking user ${userIdToBlock}`, res.data);
+        }
+      })
+      .catch((error) => {
+        console.error(`Error blocking user ${userIdToBlock}`, error);
+      });
+  };
+
+  const handleUnblockUser = (userIdToUnblock) => {
+    axios
+      .put(
+        `http://localhost:4000/api/users/${userIdToUnblock}/block`,
+        {
+          isBlocked: false,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setUsers((prevUsers) =>
+            prevUsers.map((user) => {
+              if (user.id === userIdToUnblock) {
+                const updatedUser = { ...user, isBlocked: false };
+                const savedIsBlockedValues =
+                  JSON.parse(localStorage.getItem('isBlockedValues')) || {};
+                delete savedIsBlockedValues[userIdToUnblock];
+                localStorage.setItem(
+                  'isBlockedValues',
+                  JSON.stringify(savedIsBlockedValues)
+                );
+                return updatedUser;
+              } else {
+                return user;
+              }
+            })
+          );
+          console.log(`Unblocked User ${userIdToUnblock}`, res.data);
+        } else {
+          console.error(`Error unblocking user ${userIdToUnblock}`, res.data);
+        }
+      })
+      .catch((error) => {
+        console.error(`Error unblocking user ${userIdToUnblock}`, error);
+      });
+  };
+
   return (
     <div className="table-responsive">
       <table className="table table-bordered">
@@ -118,7 +207,21 @@ function Dashboard() {
                 </button>
               </td>
               <td>
-                <button className="btn btn-warning">Block User</button>
+                {user.isBlocked ? (
+                  <button
+                    className="btn btn-success"
+                    onClick={() => handleUnblockUser(user.id)}
+                  >
+                    UnBlock User
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleBlockUser(user.id)}
+                  >
+                    Block User
+                  </button>
+                )}
               </td>
             </tr>
           ))}

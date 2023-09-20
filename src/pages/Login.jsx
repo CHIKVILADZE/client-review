@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 import { t } from 'i18next';
 
@@ -69,6 +69,10 @@ export default function Login({ t }) {
               {t('home.login')}
             </button>
           </form>
+          <br />
+          <div>
+            <Link to="/register"> {t('home.register')}</Link>
+          </div>
           <div className="col-4">
             <div
               className="btn btn-secondary mt-3"

@@ -13,27 +13,16 @@ function Post({ t }) {
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [like, setLike] = useState([]);
-  const [likeIds, setLikeIds] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [likeIcon, setLikeIcon] = useState(false);
-  const [likeCount, setLikeCount] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [reviewName, setReviewName] = useState('');
+  const [likeLength, setLikeLength] = useState(0);
+  const [currentUserLikeId, setCurrentUserLikeId] = useState([]);
   const [rating, setRating] = useState([]);
   const [reviewText, setReviewText] = useState('');
   const [reviewGroup, setReviewGroup] = useState('');
   const [sumRating, setSumRating] = useState(0);
   const { currentUser } = useContext(AuthContext);
   const [avarageRating, setAvarageRating] = useState(0);
-
-  // const updateLikeIcon = (value) => {
-  //   setLikeIcon(value);
-  //   localStorage.setItem(`likeIcon_${postId}`, JSON.stringify(value));
-  // };
-
-  useEffect(() => {
-    console.log('like', like);
-  }, [like]);
 
   useEffect(() => {
     const fetchPostAndLikes = async () => {
@@ -42,7 +31,6 @@ function Post({ t }) {
           postResponse,
           commentsResponse,
           likesResponse,
-          reviewsResponse,
           moviesResponse,
           booksResponse,
           gamesResponse,
@@ -63,8 +51,11 @@ function Post({ t }) {
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           ),
         });
+        console.log('LIKERESPONSEDATAA', likesResponse.data);
 
-        const { likeIds, userIds } = likesResponse.data;
+        setLikes(likesResponse.data);
+        console.log('LIKE INCLUDES', likes);
+        setLikeLength(likesResponse.data.length);
 
         let matchingPosts = [];
 
@@ -96,16 +87,18 @@ function Post({ t }) {
         console.log('MATChingpooost', matchingPosts);
         console.log('avarageeee', roundedAverageRating);
 
-        setLike(userIds);
+        const currentUserLike = likesResponse.data.find(
+          (like) => like.userId === currentUser.id
+        );
 
-        setReviewGroup(postResponse.data.group);
-
-        if (userIds.includes(currentUser.id)) {
+        if (currentUserLike) {
           setLikeIcon(true);
         } else {
           setLikeIcon(false);
         }
 
+        setReviewGroup(postResponse.data.group);
+        setCurrentUserLikeId(currentUserLike);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching post and likes:', error);
@@ -116,6 +109,8 @@ function Post({ t }) {
 
     fetchPostAndLikes();
   }, [postId, currentUser]);
+
+  console.log('currentUserLikecurrentUserLike', currentUserLikeId);
 
   const addComment = () => {
     const { id, firstName, lastName } = currentUser;
@@ -148,11 +143,15 @@ function Post({ t }) {
         console.error('Error adding comment:', error);
       });
   };
+
+  console.log('CUrrentLIKEEEE', currentUser);
   const handleLike = () => {
+    const { id } = currentUser;
+
     axios
       .post(
         'http://localhost:4000/api/likes',
-        { postId: postId },
+        { postId: postId, userId: id },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -163,19 +162,22 @@ function Post({ t }) {
       .then((response) => {
         const updatedLikeInfo = response.data;
 
-        setLike([...like, updatedLikeInfo.userId]);
-        console.log('HANDLEALIKEE', like);
+        console.log('HANDLEALIKEE', updatedLikeInfo);
         setLikeIcon(true);
+
+        setLikeLength((prevLikeLength) => prevLikeLength + 1);
       })
       .catch((error) => {
         console.error('Error liking post:', error);
       });
   };
+
+  console.log('cucucucu', currentUser);
+
   const handleDislike = () => {
     axios
-      .delete('http://localhost:4000/api/likes', {
+      .delete(`http://localhost:4000/api/likes/${currentUserLikeId}`, {
         data: {
-          id: likeIds,
           postId: postId,
           userId: currentUser.id,
         },
@@ -185,19 +187,17 @@ function Post({ t }) {
         withCredentials: true,
       })
       .then((response) => {
-        const updatedLikeInfo = response.data;
-        console.log('updateee', updatedLikeInfo);
-        setLike([updatedLikeInfo]);
-
+        console.log('responseresponseresponse', response);
         setLikeIcon(false);
+        setLikeLength((prevLikeLength) => prevLikeLength - 1);
 
-        console.log('deleteresponsee', response.data);
+        console.log('Like removed successfully');
       })
       .catch((error) => {
         console.error('Error disliking post:', error);
       });
   };
-
+  console.log('likeLength', likeLength);
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     let review = {
@@ -222,8 +222,6 @@ function Post({ t }) {
         }
       );
 
-      const updatedPost = response.data;
-
       const updatedPostData = {
         ...post,
         sumRating: avarageRating.toString(),
@@ -240,17 +238,11 @@ function Post({ t }) {
       setReviewText('');
       setRating('');
 
-      console.log('Review added successfully:', response);
+      console.log('Review added :', response);
     } catch (error) {
       console.error('Error adding review:', error);
     }
   };
-  // const firstNames =
-  //   comments && comments.length > 0
-  //     ? comments.map((comment) => comment.author.firstName)
-  //     : [];
-
-  console.log('Comments firstName', comments);
 
   return (
     <div className="container mt-4">
@@ -298,7 +290,7 @@ function Post({ t }) {
                     ) : (
                       <FcLikePlaceholder onClick={handleLike} />
                     )}
-                    <span>{like.length} Likes</span>
+                    <span>{likeLength} Likes</span>
                   </div>
 
                   <div className="card-footer">

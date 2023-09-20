@@ -12,7 +12,7 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
     window.open('http://localhost:4000/auth/logout', '_self');
   };
 
-  // console.log('cNAvbar Current', currentUser.isAdmin);
+  console.log('cNAvbar Current', currentUser);
 
   return (
     <Navbar bg="light" expand="lg">

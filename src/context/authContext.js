@@ -6,7 +6,18 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
-  // JSON.parse(localStorage.getItem('user')) || null
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setCurrentUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing user from localStorage:', error);
+      }
+    }
+  }, []);
 
   const login = async (inputs) => {
     try {
@@ -19,6 +30,8 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setCurrentUser(res.data);
+
+      localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
       console.error(error);
     }
@@ -47,12 +60,6 @@ export const AuthContextProvider = ({ children }) => {
     };
     getUser();
   }, []);
-  console.log('currentUser12344123', currentUser);
-
-  useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(currentUser));
-  }, [currentUser]);
-  console.log('CUREENT User', currentUser);
 
   return (
     <AuthContext.Provider value={{ currentUser, login }}>
