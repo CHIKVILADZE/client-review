@@ -5,6 +5,8 @@ import axios from 'axios';
 function Dashboard() {
   const { currentUserId } = useParams();
   const [users, setUsers] = useState([]);
+  const [makeAdmin, setMakeAdmin] = useState([]);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -33,6 +35,39 @@ function Dashboard() {
       });
   };
 
+  const updateAdminStatus = (userIdToUpdate, newAdminStatus) => {
+    axios
+      .put(
+        `http://localhost:4000/api/users/${userIdToUpdate}`,
+        {
+          isAdmin: newAdminStatus,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              user.id === userIdToUpdate
+                ? { ...user, isAdmin: newAdminStatus }
+                : user
+            )
+          );
+          console.log(`updated User ${userIdToUpdate}... Admin`, res.data);
+        } else {
+          console.error(
+            `Error updating user ${userIdToUpdate} Admin`,
+            res.data
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(`Error updating user ${userIdToUpdate} Admin`, error);
+      });
+  };
+
   return (
     <div className="table-responsive">
       <table className="table table-bordered">
@@ -50,18 +85,30 @@ function Dashboard() {
               <td>
                 {user.firstName} {user.lastName}
               </td>
-              {user.isAdmin === true ? (
-                <td>
-                  {' '}
-                  <button type="button" className=" btn btn-success">
+              <td>
+                {user.isAdmin ? (
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={() => {
+                      updateAdminStatus(user.id, false);
+                      console.log('YEEEESSSS', user.id);
+                    }}
+                  >
                     Yes
                   </button>
-                </td>
-              ) : (
-                <td>
-                  <button className="btn btn-secondary">No</button>
-                </td>
-              )}
+                ) : (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      updateAdminStatus(user.id, true);
+                      console.log('noooo', user.id);
+                    }}
+                  >
+                    No
+                  </button>
+                )}
+              </td>
               <td>
                 <button
                   className="btn btn-outline-danger"

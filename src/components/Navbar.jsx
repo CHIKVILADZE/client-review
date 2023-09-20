@@ -12,6 +12,8 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
     window.open('http://localhost:4000/auth/logout', '_self');
   };
 
+  // console.log('cNAvbar Current', currentUser.isAdmin);
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -27,9 +29,11 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
             <Button variant="light" onClick={() => handleChangeLanguage('ge')}>
               Ge
             </Button>
-            <Link to={`/dashboard/${currentUserId}`} className="mr-1">
-              <button>Admin</button>
-            </Link>{' '}
+            {currentUser && currentUser.isAdmin === true ? (
+              <Link to={`/dashboard/${currentUserId}`} className="mr-1">
+                <button>Admin</button>
+              </Link>
+            ) : null}
             &nbsp;
             {currentUser && currentUser.firstName ? (
               <div className="d-flex align-items-center">
