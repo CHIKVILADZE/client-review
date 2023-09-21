@@ -18,7 +18,7 @@ function GlobalSearch() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:4000/api/posts')
+      .get('https://client-review-seven.vercel.app/api/posts')
       .then((res) => {
         setPosts(
           res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -29,7 +29,7 @@ function GlobalSearch() {
       });
 
     axios
-      .get('http://localhost:4000/api/comments')
+      .get('https://client-review-seven.vercel.app/api/comments')
       .then((res) => {
         setComments(res.data);
       })

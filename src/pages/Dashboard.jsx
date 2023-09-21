@@ -9,7 +9,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/users');
+        const response = await axios.get(
+          'https://client-review-seven.vercel.app/api/users'
+        );
         console.log('Users Data:', response.data);
 
         const savedIsBlockedValues =
@@ -30,9 +32,12 @@ function Dashboard() {
 
   const deleteUser = (userIdToDelete) => {
     axios
-      .delete(`http://localhost:4000/api/users/${userIdToDelete}`, {
-        withCredentials: true,
-      })
+      .delete(
+        `https://client-review-seven.vercel.app/api/users/${userIdToDelete}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         console.log(`Deleted User ${userIdToDelete}`, res);
         setUsers((prevUsers) =>
@@ -47,7 +52,7 @@ function Dashboard() {
   const updateAdminStatus = (userIdToUpdate, newAdminStatus) => {
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToUpdate}`,
+        `https://client-review-seven.vercel.app/api/users/${userIdToUpdate}`,
         {
           isAdmin: newAdminStatus,
         },
@@ -80,7 +85,7 @@ function Dashboard() {
   const handleBlockUser = (userIdToBlock) => {
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToBlock}/block`,
+        `https://client-review-seven.vercel.app/api/users/${userIdToBlock}/block`,
         {
           isBlocked: true,
         },
@@ -120,7 +125,7 @@ function Dashboard() {
   const handleUnblockUser = (userIdToUnblock) => {
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToUnblock}/block`,
+        `https://client-review-seven.vercel.app/api/users/${userIdToUnblock}/block`,
         {
           isBlocked: false,
         },

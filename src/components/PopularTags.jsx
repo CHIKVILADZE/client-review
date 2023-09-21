@@ -7,9 +7,11 @@ function PopularTags({ t }) {
 
   useEffect(() => {
     const fetchTopReviews = async () => {
-      axios.get('http://localhost:4000/api/top-posts').then((response) => {
-        setPopularReviews(response.data);
-      });
+      axios
+        .get('https://client-review-seven.vercel.app/api/top-posts')
+        .then((response) => {
+          setPopularReviews(response.data);
+        });
     };
 
     fetchTopReviews();

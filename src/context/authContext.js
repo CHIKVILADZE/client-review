@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   const login = async (inputs) => {
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/auth/login',
+        'https://client-review-seven.vercel.app/api/auth/login',
         inputs,
         {
           withCredentials: true,
@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('http://localhost:4000/auth/login/success', {
+        .get('https://client-review-seven.vercel.app/auth/login/success', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',

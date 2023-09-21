@@ -35,13 +35,27 @@ function Post({ t }) {
           booksResponse,
           gamesResponse,
         ] = await Promise.all([
-          axios.get(`http://localhost:4000/api/posts/${postId}`),
-          axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/reviews?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/books?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/games?postId=${postId}`),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/posts/${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/comments?postId=${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/likes?postId=${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/reviews?postId=${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/movies?postId=${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/books?postId=${postId}`
+          ),
+          axios.get(
+            `https://client-review-seven.vercel.app/api/games?postId=${postId}`
+          ),
         ]);
 
         setPost(postResponse.data);
@@ -126,9 +140,13 @@ function Post({ t }) {
     };
 
     axios
-      .post('http://localhost:4000/api/comments', requestData, {
-        withCredentials: true,
-      })
+      .post(
+        'https://client-review-seven.vercel.app/api/comments',
+        requestData,
+        {
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         setComments({
           ...comments,
@@ -150,7 +168,7 @@ function Post({ t }) {
 
     axios
       .post(
-        'http://localhost:4000/api/likes',
+        'https://client-review-seven.vercel.app/api/likes',
         { postId: postId, userId: id },
         {
           headers: {
@@ -176,16 +194,19 @@ function Post({ t }) {
 
   const handleDislike = () => {
     axios
-      .delete(`http://localhost:4000/api/likes/${currentUserLikeId}`, {
-        data: {
-          postId: postId,
-          userId: currentUser.id,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
+      .delete(
+        `https://client-review-seven.vercel.app/api/likes/${currentUserLikeId}`,
+        {
+          data: {
+            postId: postId,
+            userId: currentUser.id,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         console.log('responseresponseresponse', response);
         setLikeIcon(false);
@@ -215,7 +236,7 @@ function Post({ t }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/${reviewGroup}`,
+        `https://client-review-seven.vercel.app/api/${reviewGroup}`,
         review,
         {
           withCredentials: true,
@@ -228,7 +249,7 @@ function Post({ t }) {
       };
 
       await axios.put(
-        `http://localhost:4000/api/posts/${postId}`,
+        `https://client-review-seven.vercel.app/api/posts/${postId}`,
         updatedPostData,
         {
           withCredentials: true,
@@ -276,7 +297,7 @@ function Post({ t }) {
 
                     <div>
                       <img
-                        src={`http://localhost:4000/images/${post.image}`}
+                        src={`https://client-review-seven.vercel.app/images/${post.image}`}
                         alt=""
                         className="img-fluid"
                         style={{ width: '90%' }}

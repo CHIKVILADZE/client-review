@@ -55,7 +55,7 @@ function Posts({ t, handleChangeLanguage }) {
                       <div>
                         {' '}
                         <img
-                          src={`http://localhost:4000/images/${post.image}`}
+                          src={`https://client-review-seven.vercel.app/images/${post.image}`}
                           alt=""
                           className="img-fluid"
                           style={{ width: '90%' }}
