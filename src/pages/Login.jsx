@@ -29,13 +29,13 @@ export default function Login({ t }) {
 
   const googleButton = () => {
     window.open(
-      'https://client-review-seven.vercel.app/auth/google/callback',
+      'https://server-review.onrender.com/auth/google/callback',
       '_self'
     );
   };
   const githubButton = () => {
     window.open(
-      'https://client-review-seven.vercel.app/auth/github/callback',
+      'https://server-review.onrender.com/auth/github/callback',
       '_self'
     );
   };
