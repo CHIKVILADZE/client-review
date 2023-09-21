@@ -24,7 +24,7 @@ function Register({ t }) {
 
     try {
       await axios.post(
-        'https://client-review-seven.vercel.app/api/auth/register',
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
         inputs
       );
       navigate('/login');
