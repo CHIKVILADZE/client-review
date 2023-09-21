@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('https://client-review-seven.vercel.app/auth/login/success', {
+        .get('https://server-review.onrender.com/auth/login/success', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',
