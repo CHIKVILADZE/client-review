@@ -21,15 +21,16 @@ function PopularTags({ t }) {
     <div className="popular-tags">
       <h5 className="mb-3">{t('home.popularPosts')} </h5>
       <ul className="list-group">
-        {popularReviews.map((post) => (
-          <Link
-            to={`post/${post.id}`}
-            key={post.id}
-            className="list-group-item"
-          >
-            {post.reviewName}
-          </Link>
-        ))}
+        {Array.isArray(popularReviews) &&
+          popularReviews.map((post) => (
+            <Link
+              to={`post/${post.id}`}
+              key={post.id}
+              className="list-group-item"
+            >
+              {post.reviewName}
+            </Link>
+          ))}
       </ul>
     </div>
   );
