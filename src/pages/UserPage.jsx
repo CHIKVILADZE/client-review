@@ -9,7 +9,9 @@ function UserPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/posts/');
+        const response = await axios.get(
+          'https://client-review-seven.vercel.app/api/posts/'
+        );
         setPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -21,7 +23,6 @@ function UserPage() {
   const currentPost = posts.find((post) => post.id === postId);
 
   if (!currentPost) {
-    // Handle the case where currentPost is undefined (post not found)
     return (
       <div>
         <h4>

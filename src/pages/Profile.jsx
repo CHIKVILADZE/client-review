@@ -38,7 +38,7 @@ function Profile({ t }) {
       );
 
       const response = await axios.post(
-        'http://localhost:4000/api/posts',
+        'https://client-review-seven.vercel.app/api/posts',
         form,
         {
           withCredentials: true,
