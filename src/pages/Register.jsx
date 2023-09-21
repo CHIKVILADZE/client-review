@@ -24,7 +24,7 @@ function Register({ t }) {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
+        'https://server-review.onrender.com//api/auth/register',
         inputs
       );
       navigate('/login');
