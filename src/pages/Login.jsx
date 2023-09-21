@@ -5,7 +5,7 @@ import { t } from 'i18next';
 
 export default function Login({ t }) {
   const [inputs, setInputs] = useState({
-    username: '',
+    email: '',
     password: '',
   });
   const [err, setErr] = useState(null);
