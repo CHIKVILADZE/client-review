@@ -6,8 +6,6 @@ import global_en from './translations/en/global.json';
 import global_ge from './translations/ge/global.json';
 import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import dotenv from 'dotenv';
-dotenv.config();
 
 i18next.init({
   interpolation: { escapeValue: false },
