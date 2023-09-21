@@ -8,7 +8,7 @@ function PopularTags({ t }) {
   useEffect(() => {
     const fetchTopReviews = async () => {
       axios
-        .get('https://client-review-seven.vercel.app/api/top-posts')
+        .get('https://server-review.onrender.com/api/top-posts')
         .then((response) => {
           setPopularReviews(response.data);
         });

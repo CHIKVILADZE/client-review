@@ -10,7 +10,7 @@ function UserPage() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          'https://client-review-seven.vercel.app/api/posts/'
+          'https://server-review.onrender.com/api/posts/'
         );
         setPosts(response.data);
       } catch (error) {

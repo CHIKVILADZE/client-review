@@ -76,7 +76,7 @@ function PDFFile({ post, t, postData }) {
         </Text>
         <Image
           style={styles.reviewImage}
-          src={`https://client-review-seven.vercel.app/images/${post.image}`}
+          src={`https://server-review.onrender.com/images/${post.image}`}
         />
         <Text style={styles.reviewText}>{t('reviews.reviewData')}</Text>
 

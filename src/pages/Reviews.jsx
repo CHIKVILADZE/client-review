@@ -17,17 +17,15 @@ function Reviews({ t }) {
       try {
         const [postResponse, moviesResponse, booksResponse, gamesResponse] =
           await Promise.all([
+            axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
             axios.get(
-              `https://client-review-seven.vercel.app/api/posts/${postId}`
+              `https://server-review.onrender.com/api/movies?postId=${postId}`
             ),
             axios.get(
-              `https://client-review-seven.vercel.app/api/movies?postId=${postId}`
+              `https://server-review.onrender.com/api/books?postId=${postId}`
             ),
             axios.get(
-              `https://client-review-seven.vercel.app/api/books?postId=${postId}`
-            ),
-            axios.get(
-              `https://client-review-seven.vercel.app/api/games?postId=${postId}`
+              `https://server-review.onrender.com/api/games?postId=${postId}`
             ),
           ]);
 
@@ -85,7 +83,7 @@ function Reviews({ t }) {
           <h2>{post.reviewName}</h2>
           <div>
             <img
-              src={`https://client-review-seven.vercel.app/images/${post.image}`}
+              src={`https://server-review.onrender.com/images/${post.image}`}
               alt=""
               className="img-fluid"
               style={{ width: '50%' }}

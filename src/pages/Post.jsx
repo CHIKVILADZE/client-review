@@ -35,26 +35,24 @@ function Post({ t }) {
           booksResponse,
           gamesResponse,
         ] = await Promise.all([
+          axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
           axios.get(
-            `https://client-review-seven.vercel.app/api/posts/${postId}`
+            `https://server-review.onrender.com/api/comments?postId=${postId}`
           ),
           axios.get(
-            `https://client-review-seven.vercel.app/api/comments?postId=${postId}`
+            `https://server-review.onrender.com/api/likes?postId=${postId}`
           ),
           axios.get(
-            `https://client-review-seven.vercel.app/api/likes?postId=${postId}`
+            `https://server-review.onrender.com/api/reviews?postId=${postId}`
           ),
           axios.get(
-            `https://client-review-seven.vercel.app/api/reviews?postId=${postId}`
+            `https://server-review.onrender.com/api/movies?postId=${postId}`
           ),
           axios.get(
-            `https://client-review-seven.vercel.app/api/movies?postId=${postId}`
+            `https://server-review.onrender.com/api/books?postId=${postId}`
           ),
           axios.get(
-            `https://client-review-seven.vercel.app/api/books?postId=${postId}`
-          ),
-          axios.get(
-            `https://client-review-seven.vercel.app/api/games?postId=${postId}`
+            `https://server-review.onrender.com/api/games?postId=${postId}`
           ),
         ]);
 
@@ -140,13 +138,9 @@ function Post({ t }) {
     };
 
     axios
-      .post(
-        'https://client-review-seven.vercel.app/api/comments',
-        requestData,
-        {
-          withCredentials: true,
-        }
-      )
+      .post('https://server-review.onrender.com/api/comments', requestData, {
+        withCredentials: true,
+      })
       .then((response) => {
         setComments({
           ...comments,
@@ -168,7 +162,7 @@ function Post({ t }) {
 
     axios
       .post(
-        'https://client-review-seven.vercel.app/api/likes',
+        'https://server-review.onrender.com/api/likes',
         { postId: postId, userId: id },
         {
           headers: {
@@ -195,7 +189,7 @@ function Post({ t }) {
   const handleDislike = () => {
     axios
       .delete(
-        `https://client-review-seven.vercel.app/api/likes/${currentUserLikeId}`,
+        `https://server-review.onrender.com/api/likes/${currentUserLikeId}`,
         {
           data: {
             postId: postId,
@@ -236,7 +230,7 @@ function Post({ t }) {
 
     try {
       const response = await axios.post(
-        `https://client-review-seven.vercel.app/api/${reviewGroup}`,
+        `https://server-review.onrender.com/api/${reviewGroup}`,
         review,
         {
           withCredentials: true,
@@ -249,7 +243,7 @@ function Post({ t }) {
       };
 
       await axios.put(
-        `https://client-review-seven.vercel.app/api/posts/${postId}`,
+        `https://server-review.onrender.com/api/posts/${postId}`,
         updatedPostData,
         {
           withCredentials: true,
@@ -297,7 +291,7 @@ function Post({ t }) {
 
                     <div>
                       <img
-                        src={`https://client-review-seven.vercel.app/images/${post.image}`}
+                        src={`https://server-review.onrender.com/images/${post.image}`}
                         alt=""
                         className="img-fluid"
                         style={{ width: '90%' }}

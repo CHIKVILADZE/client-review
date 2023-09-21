@@ -10,7 +10,7 @@ function Dashboard() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          'https://client-review-seven.vercel.app/api/users'
+          'https://server-review.onrender.com/api/users'
         );
         console.log('Users Data:', response.data);
 
@@ -33,7 +33,7 @@ function Dashboard() {
   const deleteUser = (userIdToDelete) => {
     axios
       .delete(
-        `https://client-review-seven.vercel.app/api/users/${userIdToDelete}`,
+        `https://server-review.onrender.com/api/users/${userIdToDelete}`,
         {
           withCredentials: true,
         }
@@ -52,7 +52,7 @@ function Dashboard() {
   const updateAdminStatus = (userIdToUpdate, newAdminStatus) => {
     axios
       .put(
-        `https://client-review-seven.vercel.app/api/users/${userIdToUpdate}`,
+        `https://server-review.onrender.com/api/users/${userIdToUpdate}`,
         {
           isAdmin: newAdminStatus,
         },
@@ -85,7 +85,7 @@ function Dashboard() {
   const handleBlockUser = (userIdToBlock) => {
     axios
       .put(
-        `https://client-review-seven.vercel.app/api/users/${userIdToBlock}/block`,
+        `https://server-review.onrender.com/api/users/${userIdToBlock}/block`,
         {
           isBlocked: true,
         },
@@ -125,7 +125,7 @@ function Dashboard() {
   const handleUnblockUser = (userIdToUnblock) => {
     axios
       .put(
-        `https://client-review-seven.vercel.app/api/users/${userIdToUnblock}/block`,
+        `https://server-review.onrender.com/api/users/${userIdToUnblock}/block`,
         {
           isBlocked: false,
         },

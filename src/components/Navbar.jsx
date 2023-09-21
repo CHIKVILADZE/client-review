@@ -9,7 +9,7 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
   const { currentUser } = useContext(AuthContext);
   const handleLogout = async () => {
     localStorage.clear();
-    window.open('https://client-review-seven.vercel.app/auth/logout', '_self');
+    window.open('https://server-review.onrender.com/auth/logout', '_self');
   };
 
   console.log('cNAvbar Current', currentUser);
