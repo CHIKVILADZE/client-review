@@ -29,18 +29,13 @@ export const AuthContextProvider = ({ children }) => {
         }
       );
 
-      // Assuming your server responds with an 'accessToken' property in the response data
       const accessToken = res.data.accessToken;
 
-      if (accessToken) {
-        sessionStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', accessToken);
 
-        setCurrentUser(res.data);
+      setCurrentUser(res.data);
 
-        localStorage.setItem('user', JSON.stringify(res.data));
-      } else {
-        console.error('accessToken is undefined in the response.');
-      }
+      localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
       console.error(error);
     }
