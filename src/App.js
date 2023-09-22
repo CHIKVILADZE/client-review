@@ -21,10 +21,11 @@ function App() {
     i18next.changeLanguage(lang);
   };
   console.log('mainCUrrentUser', currentUserId);
+  const baseName = process.env.REACT_APP_BASENAME || null;
 
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter baseName={baseName}>
         <Navbar
           t={t}
           handleChangeLanguage={handleChangeLanguage}
