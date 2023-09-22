@@ -29,10 +29,6 @@ export const AuthContextProvider = ({ children }) => {
         }
       );
 
-      const accessToken = res.data.accessToken;
-
-      localStorage.setItem('accessToken', accessToken);
-
       setCurrentUser(res.data);
 
       localStorage.setItem('user', JSON.stringify(res.data));
