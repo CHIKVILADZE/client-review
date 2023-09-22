@@ -12,7 +12,7 @@ function MyProfile({ t }) {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          'https://server-review.onrender.com/api/posts/'
+          'https://server-review.onrender.com/api/posts'
         );
         setPosts(response.data);
       } catch (error) {

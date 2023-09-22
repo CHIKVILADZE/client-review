@@ -3,15 +3,13 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { AuthContext } from '../context/authContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function TextLink({ t, handleChangeLanguage, currentUserId }) {
   const { currentUser } = useContext(AuthContext);
-  const navigate = useNavigate();
   const handleLogout = async () => {
-    // localStorage.clear();
-    // window.open('https://server-review.onrender.com/auth/logout', '_self');
-    navigate('/login');
+    localStorage.clear();
+    window.open('https://server-review.onrender.com/auth/logout', '_self');
   };
 
   console.log('cNAvbar Current', currentUser);
