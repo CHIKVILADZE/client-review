@@ -30,7 +30,6 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setCurrentUser(res.data);
-      console.log('I need token', res.data);
 
       localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
@@ -41,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('https://server-review.onrender.com/auth/login/success', {
+        .get('http://localhost:4000/auth/login', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',

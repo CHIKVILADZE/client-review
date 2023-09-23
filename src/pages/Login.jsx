@@ -21,6 +21,8 @@ export default function Login({ t }) {
     e.preventDefault();
     try {
       await login(inputs);
+      console.log('I need token');
+
       navigate('/');
     } catch (err) {
       setErr(err.response.data);
