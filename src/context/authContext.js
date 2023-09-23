@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -21,25 +22,26 @@ export const AuthContextProvider = ({ children }) => {
   //   }
   // }, []);
 
-  const login = async (inputs) => {
+  const login = async (e, inputs) => {
+    e.preventDefault();
     try {
-      const res = await axios
-        .post('http://localhost:4000/api/auth/login', inputs, {
+      const res = await axios.post(
+        'http://localhost:4000/api/auth/login',
+        inputs,
+        {
           withCredentials: true,
-        })
-        .then((res) => {
-          if (res.data.Login) {
-            localStorage.setItem('accessToken', res.data.token);
-
-            setCurrentUser(res.data);
-
-            navigate('/');
-          }
-        });
-
-      // localStorage.setItem('user', JSON.stringify(res.data));
+        }
+      );
+      if (res.data.Login) {
+        localStorage.setItem('accessToken', res.data.token);
+        setCurrentUser(res.data);
+        navigate('/');
+      } else {
+        setErr('Login failed. Please check your credentials.');
+      }
     } catch (error) {
       console.error(error);
+      setErr('An error occurred during login.');
     }
   };
 
@@ -58,9 +60,11 @@ export const AuthContextProvider = ({ children }) => {
           setCurrentUser(resObject.user);
         })
         .catch((err) => {
+          navigate('/login');
           console.log(err);
         });
     };
+
     getUser();
   }, []);
 
