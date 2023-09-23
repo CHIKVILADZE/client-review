@@ -46,7 +46,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('http://localhost:4000/auth/checkauth', {
+        .get('http://localhost:4000/api/auth/checkauth', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',
