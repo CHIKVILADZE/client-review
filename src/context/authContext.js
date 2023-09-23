@@ -22,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   const login = async (inputs) => {
     try {
       const res = await axios.post(
-        'https://server-review.onrender.com/api/auth/login',
+        'http://localhost:4000/api/auth/login',
         inputs,
         {
           withCredentials: true,
