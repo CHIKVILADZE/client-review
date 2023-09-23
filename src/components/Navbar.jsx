@@ -9,7 +9,7 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
   const { currentUser } = useContext(AuthContext);
   const handleLogout = async () => {
     localStorage.clear();
-    window.open('https://server-review.onrender.com/auth/logout', '_self');
+    window.open('http://locahost:4000/auth/logout', '_self');
   };
 
   console.log('cNAvbar Current', currentUser);
