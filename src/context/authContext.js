@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const storedUser = localStorage.getItem('user');
@@ -21,15 +23,19 @@ export const AuthContextProvider = ({ children }) => {
 
   const login = async (inputs) => {
     try {
-      const res = await axios.post(
-        'http://localhost:4000/api/auth/login',
-        inputs,
-        {
+      const res = await axios
+        .post('http://localhost:4000/api/auth/login', inputs, {
           withCredentials: true,
-        }
-      );
+        })
+        .then((res) => {
+          if (res.data.Login) {
+            localStorage.setItem('accessToken', res.data.token);
 
-      setCurrentUser(res.data);
+            setCurrentUser(res.data);
+
+            navigate('/');
+          }
+        });
 
       // localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
@@ -40,17 +46,15 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('http://localhost:4000/auth/login', {
+        .get('http://localhost:4000/auth/checkauth', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'access-token': localStorage.getItem('accessToken'),
           },
         })
-        .then((response) => {
-          if (response.status === 200) return response.data;
-          throw new Error('Authentication has failed!');
-        })
+        .then((response) => {})
         .then((resObject) => {
           setCurrentUser(resObject.user);
         })
