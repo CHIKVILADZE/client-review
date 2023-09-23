@@ -18,13 +18,11 @@ export default function Login({ t }) {
   };
   const { login } = useContext(AuthContext);
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //   axios.post('http"//localhost:4000/api/auth/login', inputs).then((res) => {
-  //     console.log('res dataaa', res.data);
-  //   });
-  // };
+    login(inputs);
+  };
 
   const googleButton = () => {
     window.open(
@@ -44,7 +42,7 @@ export default function Login({ t }) {
       <div className="row justify-content-center ">
         <div className="col-md-6">
           <h1 className="mb-4">{t('home.login')}</h1>
-          <form onSubmit={login}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <input
                 type="email"

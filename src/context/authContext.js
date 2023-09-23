@@ -22,8 +22,7 @@ export const AuthContextProvider = ({ children }) => {
   //   }
   // }, []);
 
-  const login = async (e, inputs) => {
-    e.preventDefault();
+  const login = async (inputs) => {
     try {
       const res = await axios.post(
         'http://localhost:4000/api/auth/login',
