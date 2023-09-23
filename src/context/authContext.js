@@ -54,7 +54,6 @@ export const AuthContextProvider = ({ children }) => {
             'access-token': localStorage.getItem('accessToken'),
           },
         })
-        .then((response) => {})
         .then((resObject) => {
           setCurrentUser(resObject.user);
         })
