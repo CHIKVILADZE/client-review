@@ -7,17 +7,17 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setCurrentUser(parsedUser);
-      } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   if (storedUser) {
+  //     try {
+  //       const parsedUser = JSON.parse(storedUser);
+  //       setCurrentUser(parsedUser);
+  //     } catch (error) {
+  //       console.error('Error parsing user from localStorage:', error);
+  //     }
+  //   }
+  // }, []);
 
   const login = async (inputs) => {
     try {
@@ -31,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
 
       setCurrentUser(res.data);
 
-      localStorage.setItem('user', JSON.stringify(res.data));
+      // localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
       console.error(error);
     }
