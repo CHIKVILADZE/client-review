@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 import { t } from 'i18next';
+import axios from 'axios';
 
 export default function Login({ t }) {
   const [inputs, setInputs] = useState({
@@ -19,14 +20,10 @@ export default function Login({ t }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      await login(inputs);
-      console.log('I need token');
 
-      navigate('/');
-    } catch (err) {
-      setErr(err.response.data);
-    }
+    axios.post('http"//localhost:4000/api/auth/login', inputs).then((res) => {
+      console.log('res dataaa', res.data);
+    });
   };
 
   const googleButton = () => {
