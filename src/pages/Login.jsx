@@ -10,6 +10,7 @@ export default function Login({ t }) {
     password: '',
   });
   const [err, setErr] = useState(null);
+  const { setCurrentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -18,10 +19,29 @@ export default function Login({ t }) {
   };
   const { login } = useContext(AuthContext);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission and page refresh
 
-    login(inputs);
+    try {
+      const res = await axios.post(
+        'http://localhost:4000/api/auth/login',
+        inputs,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.Login) {
+        localStorage.setItem('accessToken', res.data.token);
+        setCurrentUser(res.data);
+        navigate('/'); // Navigate to the desired page on successful login
+      } else {
+        setErr('Login failed. Please check your credentials.');
+      }
+    } catch (error) {
+      console.error(error);
+      setErr('An error occurred during login.');
+    }
   };
 
   const googleButton = () => {
@@ -42,7 +62,7 @@ export default function Login({ t }) {
       <div className="row justify-content-center ">
         <div className="col-md-6">
           <h1 className="mb-4">{t('home.login')}</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}>
             <div className="mb-3">
               <input
                 type="email"

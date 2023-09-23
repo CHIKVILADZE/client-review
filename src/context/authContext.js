@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -8,7 +7,6 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currentUser, setCurrentUser] = useState();
   const [err, setErr] = useState('');
-  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const storedUser = localStorage.getItem('user');
@@ -22,27 +20,27 @@ export const AuthContextProvider = ({ children }) => {
   //   }
   // }, []);
 
-  const login = async (inputs) => {
-    try {
-      const res = await axios.post(
-        'http://localhost:4000/api/auth/login',
-        inputs,
-        {
-          withCredentials: true,
-        }
-      );
-      if (res.data.Login) {
-        localStorage.setItem('accessToken', res.data.token);
-        setCurrentUser(res.data);
-        navigate('/');
-      } else {
-        setErr('Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      console.error(error);
-      setErr('An error occurred during login.');
-    }
-  };
+  // const login = async (e, inputs) => {
+  //   e.preventDefault();
+  //   try {
+  //     const res = await axios.post(
+  //       'http://localhost:4000/api/auth/login',
+  //       inputs,
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     if (res.data.Login) {
+  //       localStorage.setItem('accessToken', res.data.token);
+  //       setCurrentUser(res.data);
+  //     } else {
+  //       setErr('Login failed. Please check your credentials.');
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     setErr('An error occurred during login.');
+  //   }
+  // };
 
   useEffect(() => {
     const getUser = () => {
@@ -59,16 +57,14 @@ export const AuthContextProvider = ({ children }) => {
           setCurrentUser(resObject.user);
         })
         .catch((err) => {
-          navigate('/login');
           console.log(err);
         });
     };
-
     getUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, login }}>
+    <AuthContext.Provider value={{ currentUser }}>
       {children}
     </AuthContext.Provider>
   );
