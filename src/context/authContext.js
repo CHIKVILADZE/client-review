@@ -30,6 +30,7 @@ export const AuthContextProvider = ({ children }) => {
       );
 
       setCurrentUser(res.data);
+      console.log('I need token', res.data);
 
       localStorage.setItem('user', JSON.stringify(res.data));
     } catch (error) {
