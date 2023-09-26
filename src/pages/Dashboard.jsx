@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
-  const { currentUserId } = useParams();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(
-          'https://server-review.onrender.com/api/users'
-        );
+        const response = await axios.get('http://localhost:4000/api/users');
         console.log('Users Data:', response.data);
 
         const savedIsBlockedValues =
@@ -31,13 +27,17 @@ function Dashboard() {
   }, []);
 
   const deleteUser = (userIdToDelete) => {
+    const accessToken = localStorage.getItem('accessToken');
+
     axios
-      .delete(
-        `https://server-review.onrender.com/api/users/${userIdToDelete}`,
-        {
-          withCredentials: true,
-        }
-      )
+      .delete(`http://localhost:4000/api/users/${userIdToDelete}`, {
+        withCredentials: true,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
         console.log(`Deleted User ${userIdToDelete}`, res);
         setUsers((prevUsers) =>
@@ -50,14 +50,21 @@ function Dashboard() {
   };
 
   const updateAdminStatus = (userIdToUpdate, newAdminStatus) => {
+    const accessToken = localStorage.getItem('accessToken');
+
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToUpdate}`,
+        `http://localhost:4000/api/users/${userIdToUpdate}`,
         {
           isAdmin: newAdminStatus,
         },
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       )
       .then((res) => {
@@ -83,14 +90,21 @@ function Dashboard() {
   };
 
   const handleBlockUser = (userIdToBlock) => {
+    const accessToken = localStorage.getItem('accessToken');
+
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToBlock}/block`,
+        `http://localhost:4000/api/users/${userIdToBlock}/block`,
         {
           isBlocked: true,
         },
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       )
       .then((res) => {
@@ -123,14 +137,20 @@ function Dashboard() {
   };
 
   const handleUnblockUser = (userIdToUnblock) => {
+    const accessToken = localStorage.getItem('accessToken');
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToUnblock}/block`,
+        `http://localhost:4000/api/users/${userIdToUnblock}/block`,
         {
           isBlocked: false,
         },
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       )
       .then((res) => {

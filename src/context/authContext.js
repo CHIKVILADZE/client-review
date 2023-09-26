@@ -8,41 +8,9 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [err, setErr] = useState('');
 
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   if (storedUser) {
-  //     try {
-  //       const parsedUser = JSON.parse(storedUser);
-  //       setCurrentUser(parsedUser);
-  //     } catch (error) {
-  //       console.error('Error parsing user from localStorage:', error);
-  //     }
-  //   }
-  // }, []);
-
-  // const login = async (e, inputs) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await axios.post(
-  //       'http://localhost:4000/api/auth/login',
-  //       inputs,
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
-  //     if (res.data.Login) {
-  //       localStorage.setItem('accessToken', res.data.token);
-  //       setCurrentUser(res.data);
-  //     } else {
-  //       setErr('Login failed. Please check your credentials.');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setErr('An error occurred during login.');
-  //   }
-  // };
-
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+
     const getUser = () => {
       axios
         .get('http://localhost:4000/api/auth/checkauth', {
@@ -50,11 +18,11 @@ export const AuthContextProvider = ({ children }) => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'access-token': localStorage.getItem('accessToken'),
+            Authorization: `Bearer ${accessToken}`,
           },
         })
         .then((resObject) => {
-          setCurrentUser(resObject.user);
+          setCurrentUser(resObject.data);
         })
         .catch((err) => {
           console.log(err);
@@ -64,7 +32,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -18,7 +18,7 @@ function GlobalSearch() {
 
   useEffect(() => {
     axios
-      .get('https://server-review.onrender.com/api/posts')
+      .get('http://localhost:4000/api/posts')
       .then((res) => {
         setPosts(
           res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -29,7 +29,7 @@ function GlobalSearch() {
       });
 
     axios
-      .get('https://server-review.onrender.com/api/comments')
+      .get('http://localhost:4000/api/comments')
       .then((res) => {
         setComments(res.data);
       })

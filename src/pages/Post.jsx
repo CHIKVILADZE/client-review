@@ -31,29 +31,17 @@ function Post({ t }) {
           postResponse,
           commentsResponse,
           likesResponse,
+
           moviesResponse,
           booksResponse,
           gamesResponse,
         ] = await Promise.all([
-          axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
-          axios.get(
-            `https://server-review.onrender.com/api/comments?postId=${postId}`
-          ),
-          axios.get(
-            `https://server-review.onrender.com/api/likes?postId=${postId}`
-          ),
-          axios.get(
-            `https://server-review.onrender.com/api/reviews?postId=${postId}`
-          ),
-          axios.get(
-            `https://server-review.onrender.com/api/movies?postId=${postId}`
-          ),
-          axios.get(
-            `https://server-review.onrender.com/api/books?postId=${postId}`
-          ),
-          axios.get(
-            `https://server-review.onrender.com/api/games?postId=${postId}`
-          ),
+          axios.get(`http://localhost:4000/api/posts/${postId}`),
+          axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/books?postId=${postId}`),
+          axios.get(`http://localhost:4000/api/games?postId=${postId}`),
         ]);
 
         setPost(postResponse.data);
@@ -63,10 +51,8 @@ function Post({ t }) {
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           ),
         });
-        console.log('LIKERESPONSEDATAA', likesResponse.data);
 
         setLikes(likesResponse.data);
-        console.log('LIKE INCLUDES', likes);
         setLikeLength(likesResponse.data.length);
 
         let matchingPosts = [];
@@ -92,15 +78,12 @@ function Post({ t }) {
         setSumRating(sumOfRatings);
 
         const avarageRatings = sumOfRatings / matchingPosts.length / 2;
+
         const roundedAverageRating = Math.round(avarageRatings);
         setAvarageRating(roundedAverageRating);
 
-        console.log('SUMmm', sumOfRatings);
-        console.log('MATChingpooost', matchingPosts);
-        console.log('avarageeee', roundedAverageRating);
-
         const currentUserLike = likesResponse.data.find(
-          (like) => like.userId === currentUser.id
+          (like) => like.userId === (currentUser ? currentUser.id : null)
         );
 
         if (currentUserLike) {
@@ -122,8 +105,6 @@ function Post({ t }) {
     fetchPostAndLikes();
   }, [postId, currentUser]);
 
-  console.log('currentUserLikecurrentUserLike', currentUserLikeId);
-
   const addComment = () => {
     const { id, firstName, lastName } = currentUser;
 
@@ -136,10 +117,16 @@ function Post({ t }) {
         lastName: currentUser.lastName,
       },
     };
+    const accessToken = localStorage.getItem('accessToken');
 
     axios
-      .post('https://server-review.onrender.com/api/comments', requestData, {
+      .post('http://localhost:4000/api/comments', requestData, {
         withCredentials: true,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((response) => {
         setComments({
@@ -156,25 +143,26 @@ function Post({ t }) {
       });
   };
 
-  console.log('CUrrentLIKEEEE', currentUser);
   const handleLike = () => {
     const { id } = currentUser;
+    const accessToken = localStorage.getItem('accessToken');
 
     axios
       .post(
-        'https://server-review.onrender.com/api/likes',
+        'http://localhost:4000/api/likes',
         { postId: postId, userId: id },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       )
       .then((response) => {
         const updatedLikeInfo = response.data;
 
-        console.log('HANDLEALIKEE', updatedLikeInfo);
         setLikeIcon(true);
 
         setLikeLength((prevLikeLength) => prevLikeLength + 1);
@@ -184,25 +172,19 @@ function Post({ t }) {
       });
   };
 
-  console.log('cucucucu', currentUser);
-
   const handleDislike = () => {
     axios
-      .delete(
-        `https://server-review.onrender.com/api/likes/${currentUserLikeId}`,
-        {
-          data: {
-            postId: postId,
-            userId: currentUser.id,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      )
+      .delete(`http://localhost:4000/api/likes/${currentUserLikeId}`, {
+        data: {
+          postId: postId,
+          userId: currentUser.id,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      })
       .then((response) => {
-        console.log('responseresponseresponse', response);
         setLikeIcon(false);
         setLikeLength((prevLikeLength) => prevLikeLength - 1);
 
@@ -212,7 +194,6 @@ function Post({ t }) {
         console.error('Error disliking post:', error);
       });
   };
-  console.log('likeLength', likeLength);
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     let review = {
@@ -227,13 +208,18 @@ function Post({ t }) {
         lastName: currentUser.lastName,
       },
     };
-
+    const accessToken = localStorage.getItem('accessToken');
     try {
       const response = await axios.post(
-        `https://server-review.onrender.com/api/${reviewGroup}`,
+        `http://localhost:4000/api/${reviewGroup}`,
         review,
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 
@@ -243,10 +229,15 @@ function Post({ t }) {
       };
 
       await axios.put(
-        `https://server-review.onrender.com/api/posts/${postId}`,
+        `http://localhost:4000/api/posts/${postId}`,
         updatedPostData,
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 
@@ -258,7 +249,6 @@ function Post({ t }) {
       console.error('Error adding review:', error);
     }
   };
-
   return (
     <div className="container mt-4">
       <div className="row">
@@ -291,7 +281,7 @@ function Post({ t }) {
 
                     <div>
                       <img
-                        src={`https://server-review.onrender.com/images/${post.image}`}
+                        src={`http://localhost:4000/images/${post.image}`}
                         alt=""
                         className="img-fluid"
                         style={{ width: '90%' }}
@@ -366,11 +356,23 @@ function Post({ t }) {
                           {' '}
                           {t('post.reviewName')}
                         </label>
-                        <input type="text" value={post.reviewName} readOnly />
+                        <input
+                          type="text"
+                          value={post.reviewName}
+                          readOnly
+                          id="reviewName"
+                          name="reviewName"
+                        />
                         <label htmlFor="reviewGroup" className="mt-2">
                           {t('post.reviewGroup')}
                         </label>
-                        <input type="text" value={post.group} readOnly />
+                        <input
+                          type="text"
+                          value={post.group}
+                          readOnly
+                          id="reviewGroup"
+                          name="reviewGroup"
+                        />
                       </>
                     )}
                   </div>

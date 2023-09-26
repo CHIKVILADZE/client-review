@@ -16,7 +16,7 @@ function Posts({ t, handleChangeLanguage }) {
     setError(null);
 
     axios
-      .get('https://server-review.onrender.com/api/posts')
+      .get('http://localhost:4000/api/posts')
       .then((res) => {
         setPosts(
           res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -28,8 +28,6 @@ function Posts({ t, handleChangeLanguage }) {
         setIsLoading(false);
       });
   }, []);
-  console.log('postID', postId);
-  console.log('currentUser', currentUser);
 
   return (
     <div>
@@ -55,7 +53,7 @@ function Posts({ t, handleChangeLanguage }) {
                       <div>
                         {' '}
                         <img
-                          src={`https://server-review.onrender.com/images/${post.image}`}
+                          src={`http://localhost:4000/images/${post.image}`}
                           alt=""
                           className="img-fluid"
                           style={{ width: '90%' }}

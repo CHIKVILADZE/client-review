@@ -9,9 +9,7 @@ function UserPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(
-          'https://server-review.onrender.com/api/posts/'
-        );
+        const response = await axios.get('http://localhost:4000/api/posts/');
         setPosts(response.data);
       } catch (error) {
         console.error(error);

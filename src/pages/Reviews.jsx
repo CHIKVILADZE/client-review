@@ -1,32 +1,23 @@
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PDFFile from '../components/PDFFile';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { AuthContext } from '../context/authContext';
 
 function Reviews({ t }) {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [postData, setPostData] = useState([]);
-  const [starsRating, setStarsRating] = useState('');
-  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPostAndData = async () => {
       try {
         const [postResponse, moviesResponse, booksResponse, gamesResponse] =
           await Promise.all([
-            axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
-            axios.get(
-              `https://server-review.onrender.com/api/movies?postId=${postId}`
-            ),
-            axios.get(
-              `https://server-review.onrender.com/api/books?postId=${postId}`
-            ),
-            axios.get(
-              `https://server-review.onrender.com/api/games?postId=${postId}`
-            ),
+            axios.get(`http://localhost:4000/api/posts/${postId}`),
+            axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/books?postId=${postId}`),
+            axios.get(`http://localhost:4000/api/games?postId=${postId}`),
           ]);
 
         if (!postResponse || !postResponse.data) {
@@ -51,7 +42,7 @@ function Reviews({ t }) {
           );
           setPostData(matchingData);
         } else if (
-          post.group === 'games' &&
+          post.group === 'Games' &&
           gamesResponse &&
           gamesResponse.data
         ) {
@@ -72,9 +63,6 @@ function Reviews({ t }) {
 
     fetchPostAndData();
   }, []);
-  console.log('rating', starsRating);
-  console.log('postDAtaa', postData);
-  console.log('current usssssss', currentUser);
 
   return (
     <div className="container mt-4">
@@ -83,7 +71,7 @@ function Reviews({ t }) {
           <h2>{post.reviewName}</h2>
           <div>
             <img
-              src={`https://server-review.onrender.com/images/${post.image}`}
+              src={`http://localhost:4000/images/${post.image}`}
               alt=""
               className="img-fluid"
               style={{ width: '50%' }}

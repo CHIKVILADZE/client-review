@@ -11,9 +11,7 @@ function MyProfile({ t }) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(
-          'https://server-review.onrender.com/api/posts'
-        );
+        const response = await axios.get('http://localhost:4000/api/posts');
         setPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -25,6 +23,31 @@ function MyProfile({ t }) {
   const currentUserId = currentUser ? currentUser.id : null;
 
   const userPosts = posts.filter((post) => post.authorId === currentUserId);
+
+  const handleDeletePost = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/posts/${postId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log('Post deleted successfully');
+      } else {
+        console.error('Error deleting post');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="border-bottom">
@@ -51,8 +74,12 @@ function MyProfile({ t }) {
                   <Link to={`/post/${post.id}`}>
                     <button className="btn btn-info mr-2">Read</button>
                   </Link>
-                  <button className="btn btn-warning mr-2">Edit</button>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleDeletePost(postId)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>

@@ -4,15 +4,29 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { AuthContext } from '../context/authContext';
 import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function TextLink({ t, handleChangeLanguage, currentUserId }) {
-  const { currentUser } = useContext(AuthContext);
-  const handleLogout = async () => {
-    localStorage.clear();
-    window.open('http://localhost:4000/api/auth/login', '_self');
-  };
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  console.log('cNAvbar Current', currentUser);
+  const handleLogout = async (e) => {
+    e.preventDefault();
+
+    localStorage.removeItem('accessToken');
+
+    try {
+      await axios.post('http://localhost:4000/api/auth/logout');
+
+      setCurrentUser(null);
+
+      sessionStorage.removeItem('accessToken');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   return (
     <Navbar bg="light" expand="lg">

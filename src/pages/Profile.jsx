@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import axios from 'axios';
 import MyProfile from '../components/MyProfile';
+import { useParams } from 'react-router-dom';
 
 function Profile({ t }) {
   const { currentUser } = useContext(AuthContext);
@@ -37,15 +38,20 @@ function Profile({ t }) {
         })
       );
 
+      const accessToken = localStorage.getItem('accessToken');
+
       const response = await axios.post(
-        'https://server-review.onrender.com/api/posts',
+        'http://localhost:4000/api/posts',
         form,
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
-
-      console.log('Post submission successful:', response.data);
 
       setFile(null);
       setFormData({
@@ -58,18 +64,15 @@ function Profile({ t }) {
       console.error('Error submitting post:', error);
     }
   };
-  console.log('currentUser', currentUser);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  console.log('filee', file);
 
   const handleSelectChange = (event) => {
     setReviewGroup(event.target.value);
   };
-  console.log('reviewGroup', reviewGroup);
 
   return (
     <div className="container-fluid mt-5 p-2">
@@ -147,7 +150,7 @@ function Profile({ t }) {
                     className="form-control"
                     id="image"
                     name="image"
-                    accept="image/*"
+                    accept="image"
                     onChange={handleFile}
                   />
                 </div>

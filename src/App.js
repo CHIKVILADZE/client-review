@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -12,6 +12,7 @@ import UserPage from './pages/UserPage';
 import Dashboard from './pages/Dashboard';
 import { useContext } from 'react';
 import { AuthContext } from './context/authContext';
+import MyProfile from './components/MyProfile';
 
 function App() {
   const [t, i18next] = useTranslation('global');
@@ -20,12 +21,10 @@ function App() {
   const handleChangeLanguage = (lang) => {
     i18next.changeLanguage(lang);
   };
-  console.log('mainCUrrentUser', currentUserId);
-  const baseName = process.env.REACT_APP_BASENAME || null;
 
   return (
     <>
-      <BrowserRouter baseName={baseName}>
+      <BrowserRouter>
         <Navbar
           t={t}
           handleChangeLanguage={handleChangeLanguage}
@@ -40,6 +39,8 @@ function App() {
           <Route path="/post/:postId" element={<Post t={t} />} />
           <Route path="/reviews/:postId" element={<Reviews t={t} />} />
           <Route path="/userpage/:postId" element={<UserPage t={t} />} />
+          <Route path="/myprofile/:postId" component={MyProfile} />
+
           <Route
             path="/dashboard/:currentUserId"
             element={<Dashboard t={t} />}

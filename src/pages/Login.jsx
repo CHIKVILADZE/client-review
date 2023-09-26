@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
-import { t } from 'i18next';
 import axios from 'axios';
 
 export default function Login({ t }) {
@@ -17,10 +16,10 @@ export default function Login({ t }) {
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form submission and page refresh
+    e.preventDefault();
+    const accessToken = localStorage.getItem('accessToken');
 
     try {
       const res = await axios.post(
@@ -28,18 +27,24 @@ export default function Login({ t }) {
         inputs,
         {
           withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
 
       if (res.data.Login) {
         localStorage.setItem('accessToken', res.data.token);
-        setCurrentUser(res.data);
-        navigate('/'); // Navigate to the desired page on successful login
+        console.log('RESSS DATAAA', res.data.others);
+        setCurrentUser(res.data.others);
+        navigate('/');
       } else {
         setErr('Login failed. Please check your credentials.');
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       setErr('An error occurred during login.');
     }
   };
@@ -92,7 +97,7 @@ export default function Login({ t }) {
           <div>
             <Link to="/register"> {t('home.register')}</Link>
           </div>
-          <div className="col-4">
+          {/* <div className="col-4">
             <div
               className="btn btn-secondary mt-3"
               onClick={(login) => googleButton(login)}
@@ -102,7 +107,7 @@ export default function Login({ t }) {
             <div className="btn btn-secondary mt-3" onClick={githubButton}>
               Sith In With Github
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
