@@ -6,9 +6,13 @@ import { AuthContext } from '../context/authContext';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ReactSwitch from 'react-switch';
+import { ThemeContext } from '../App';
 
 function TextLink({ t, handleChangeLanguage, currentUserId }) {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { theme, toogleTheme } = useContext(ThemeContext);
+
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
@@ -17,7 +21,7 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
     localStorage.removeItem('accessToken');
 
     try {
-      await axios.post('http://localhost:4000/api/auth/logout');
+      await axios.post('https://server-review.onrender.com/api/auth/logout');
 
       setCurrentUser(null);
 
@@ -29,14 +33,21 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
   };
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar className="main">
       <Container>
         <div className="d-flex justify-content-between align-items-center w-100">
-          {' '}
           <div>
-            <Navbar.Brand href="/">{t('navbar.homeLink')}</Navbar.Brand>{' '}
+            <Navbar.Brand className="main" href="/">
+              {t('navbar.homeLink')}
+            </Navbar.Brand>
           </div>
-          <div>
+          <div className="switch">
+            <ReactSwitch onChange={toogleTheme} checked={theme === 'dark'} />
+          </div>
+          <div
+            className=" d-flex   justify-content-between"
+            style={{ width: '330px' }}
+          >
             <Button variant="light" onClick={() => handleChangeLanguage('en')}>
               En
             </Button>
@@ -45,7 +56,7 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
             </Button>
             {currentUser && currentUser.isAdmin === true ? (
               <Link to={`/dashboard/${currentUserId}`} className="mr-1">
-                <button>Admin</button>
+                <button className="btn btn-success mb-1">Admin</button>{' '}
               </Link>
             ) : null}
             &nbsp;

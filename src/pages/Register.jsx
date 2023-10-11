@@ -23,7 +23,10 @@ function Register({ t }) {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:4000/api/auth/register', inputs);
+      await axios.post(
+        'https://server-review.onrender.com/api/auth/register',
+        inputs
+      );
       navigate('/login');
     } catch (error) {
       setError(error.response.data);

@@ -9,7 +9,9 @@ function UserPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/posts/');
+        const response = await axios.get(
+          'https://server-review.onrender.com/api/posts/'
+        );
         setPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -24,7 +26,7 @@ function UserPage() {
     return (
       <div>
         <h4>
-          <small className="text-muted">Post not found</small>
+          <small>Post not found</small>
         </h4>
       </div>
     );
@@ -37,8 +39,8 @@ function UserPage() {
   return (
     <div>
       <h4 className="mt-4">
-        <small className="text-muted">Posts by:</small>{' '}
-        {currentPost.author.firstName} {currentPost.author.lastName}
+        <small>Posts by:</small> {currentPost.author.firstName}{' '}
+        {currentPost.author.lastName}
       </h4>
       <div className="table-responsive mt-4">
         <table className="table">

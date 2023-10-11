@@ -41,7 +41,7 @@ function Profile({ t }) {
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(
-        'http://localhost:4000/api/posts',
+        'https://server-review.onrender.com/api/posts',
         form,
         {
           withCredentials: true,
@@ -78,7 +78,7 @@ function Profile({ t }) {
     <div className="container-fluid mt-5 p-2">
       <div className="row">
         <div className="col-md-5 mx-auto">
-          <div className="card bg-info">
+          <div className="main card bg-info">
             <div className="card-body">
               <h5 className="card-title">Profile</h5>
 

@@ -10,9 +10,11 @@ import Reviews from './pages/Reviews';
 import { useTranslation } from 'react-i18next';
 import UserPage from './pages/UserPage';
 import Dashboard from './pages/Dashboard';
-import { useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { AuthContext } from './context/authContext';
 import MyProfile from './components/MyProfile';
+
+export const ThemeContext = createContext(null);
 
 function App() {
   const [t, i18next] = useTranslation('global');
@@ -22,32 +24,40 @@ function App() {
     i18next.changeLanguage(lang);
   };
 
+  const [theme, setTheme] = useState('light');
+
+  const toogleTheme = () => {
+    setTheme((curr) => (curr === 'light' ? 'dark' : 'light'));
+  };
+
   return (
-    <>
-      <BrowserRouter>
-        <Navbar
-          t={t}
-          handleChangeLanguage={handleChangeLanguage}
-          currentUserId={currentUserId}
-        />
-
-        <Routes>
-          <Route path="/" element={<Home t={t} />} />
-          <Route path="/register" element={<Register t={t} />} />
-          <Route path="/login" element={<Login t={t} />} />
-          <Route path="/profile" element={<Profile t={t} />} />
-          <Route path="/post/:postId" element={<Post t={t} />} />
-          <Route path="/reviews/:postId" element={<Reviews t={t} />} />
-          <Route path="/userpage/:postId" element={<UserPage t={t} />} />
-          <Route path="/myprofile/:postId" component={MyProfile} />
-
-          <Route
-            path="/dashboard/:currentUserId"
-            element={<Dashboard t={t} />}
+    <ThemeContext.Provider value={{ theme, toogleTheme }}>
+      <div className="App " id={theme}>
+        <BrowserRouter>
+          <Navbar
+            t={t}
+            handleChangeLanguage={handleChangeLanguage}
+            currentUserId={currentUserId}
           />
-        </Routes>
-      </BrowserRouter>
-    </>
+
+          <Routes>
+            <Route path="/" element={<Home t={t} />} />
+            <Route path="/register" element={<Register t={t} />} />
+            <Route path="/login" element={<Login t={t} />} />
+            <Route path="/profile" element={<Profile t={t} />} />
+            <Route path="/post/:postId" element={<Post t={t} />} />
+            <Route path="/reviews/:postId" element={<Reviews t={t} />} />
+            <Route path="/userpage/:postId" element={<UserPage t={t} />} />
+            <Route path="/myprofile/:postId" component={MyProfile} />
+
+            <Route
+              path="/dashboard/:currentUserId"
+              element={<Dashboard t={t} />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeContext.Provider>
   );
 }
 

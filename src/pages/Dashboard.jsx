@@ -7,7 +7,9 @@ function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/users');
+        const response = await axios.get(
+          'https://server-review.onrender.com/api/users'
+        );
         console.log('Users Data:', response.data);
 
         const savedIsBlockedValues =
@@ -30,14 +32,17 @@ function Dashboard() {
     const accessToken = localStorage.getItem('accessToken');
 
     axios
-      .delete(`http://localhost:4000/api/users/${userIdToDelete}`, {
-        withCredentials: true,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .delete(
+        `https://server-review.onrender.com/api/users/${userIdToDelete}`,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(`Deleted User ${userIdToDelete}`, res);
         setUsers((prevUsers) =>
@@ -54,7 +59,7 @@ function Dashboard() {
 
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToUpdate}`,
+        `https://server-review.onrender.com/api/users/${userIdToUpdate}`,
         {
           isAdmin: newAdminStatus,
         },
@@ -94,7 +99,7 @@ function Dashboard() {
 
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToBlock}/block`,
+        `https://server-review.onrender.com/api/users/${userIdToBlock}/block`,
         {
           isBlocked: true,
         },
@@ -140,7 +145,7 @@ function Dashboard() {
     const accessToken = localStorage.getItem('accessToken');
     axios
       .put(
-        `http://localhost:4000/api/users/${userIdToUnblock}/block`,
+        `https://server-review.onrender.com/api/users/${userIdToUnblock}/block`,
         {
           isBlocked: false,
         },
@@ -183,8 +188,9 @@ function Dashboard() {
   };
 
   return (
-    <div className="table-responsive">
-      <table className="table table-bordered">
+    <div className="table-responsive m-5 ">
+      <h2>Admins Dashboard</h2>
+      <table className="table  table-bordered ">
         <thead>
           <tr>
             <th>Name</th>
@@ -193,7 +199,7 @@ function Dashboard() {
             <th>Block User</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="main">
           {users.map((user, index) => (
             <tr key={index}>
               <td>

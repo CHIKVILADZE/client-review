@@ -36,12 +36,22 @@ function Post({ t }) {
           booksResponse,
           gamesResponse,
         ] = await Promise.all([
-          axios.get(`http://localhost:4000/api/posts/${postId}`),
-          axios.get(`http://localhost:4000/api/comments?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/likes?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/books?postId=${postId}`),
-          axios.get(`http://localhost:4000/api/games?postId=${postId}`),
+          axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
+          axios.get(
+            `https://server-review.onrender.com/api/comments?postId=${postId}`
+          ),
+          axios.get(
+            `https://server-review.onrender.com/api/likes?postId=${postId}`
+          ),
+          axios.get(
+            `https://server-review.onrender.com/api/movies?postId=${postId}`
+          ),
+          axios.get(
+            `https://server-review.onrender.com/api/books?postId=${postId}`
+          ),
+          axios.get(
+            `https://server-review.onrender.com/api/games?postId=${postId}`
+          ),
         ]);
 
         setPost(postResponse.data);
@@ -120,7 +130,7 @@ function Post({ t }) {
     const accessToken = localStorage.getItem('accessToken');
 
     axios
-      .post('http://localhost:4000/api/comments', requestData, {
+      .post('https://server-review.onrender.com/api/comments', requestData, {
         withCredentials: true,
         headers: {
           Accept: 'application/json',
@@ -149,7 +159,7 @@ function Post({ t }) {
 
     axios
       .post(
-        'http://localhost:4000/api/likes',
+        'https://server-review.onrender.com/api/likes',
         { postId: postId, userId: id },
         {
           withCredentials: true,
@@ -174,16 +184,19 @@ function Post({ t }) {
 
   const handleDislike = () => {
     axios
-      .delete(`http://localhost:4000/api/likes/${currentUserLikeId}`, {
-        data: {
-          postId: postId,
-          userId: currentUser.id,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      })
+      .delete(
+        `https://server-review.onrender.com/api/likes/${currentUserLikeId}`,
+        {
+          data: {
+            postId: postId,
+            userId: currentUser.id,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         setLikeIcon(false);
         setLikeLength((prevLikeLength) => prevLikeLength - 1);
@@ -211,7 +224,7 @@ function Post({ t }) {
     const accessToken = localStorage.getItem('accessToken');
     try {
       const response = await axios.post(
-        `http://localhost:4000/api/${reviewGroup}`,
+        `https://server-review.onrender.com/api/${reviewGroup}`,
         review,
         {
           withCredentials: true,
@@ -229,7 +242,7 @@ function Post({ t }) {
       };
 
       await axios.put(
-        `http://localhost:4000/api/posts/${postId}`,
+        `https://server-review.onrender.com/api/posts/${postId}`,
         updatedPostData,
         {
           withCredentials: true,
@@ -250,11 +263,11 @@ function Post({ t }) {
     }
   };
   return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="col-md-8">
+    <div className="container mt-4 ">
+      <div className="row ">
+        <div className="col-md-8 ">
           <div className="card">
-            <div className="card-body">
+            <div className="card-body main">
               {post ? (
                 <>
                   <div>
@@ -279,17 +292,20 @@ function Post({ t }) {
                       </span>
                     </p>
 
-                    <div>
+                    <div className="container text-center">
                       <img
-                        src={`http://localhost:4000/images/${post.image}`}
+                        src={`https://server-review.onrender.com/images/${post.image}`}
                         alt=""
-                        className="img-fluid"
-                        style={{ width: '90%' }}
+                        className="img-fluid "
+                        style={{ width: '100%' }}
                       />
                     </div>
-                    <p className="card-text">{post.desc}</p>
+                    <div className="container mt-2">
+                      {' '}
+                      <p className="card-text">{post.desc}</p>
+                    </div>
                   </div>
-                  <div className="d-flex justify-content-between">
+                  <div className="d-flex p-3 justify-content-between ">
                     {likeIcon === true ? (
                       <FcLike onClick={handleDislike} />
                     ) : (
@@ -343,7 +359,7 @@ function Post({ t }) {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card">
+          <div className=" main card">
             <div className="card-body">
               <h4> {t('post.review')}</h4>
               <form onSubmit={handleReviewSubmit}>
@@ -412,7 +428,13 @@ function Post({ t }) {
               </form>
             </div>
           </div>
-          <Link to={`/reviews/${postId}`}> {t('post.allReview')} </Link>
+          <Link
+            className="text-decoration-none fs-5 text-info"
+            to={`/reviews/${postId}`}
+          >
+            {' '}
+            {t('post.allReview')}{' '}
+          </Link>
         </div>
       </div>
     </div>

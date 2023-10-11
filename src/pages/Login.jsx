@@ -9,7 +9,7 @@ export default function Login({ t }) {
     password: '',
   });
   const [err, setErr] = useState(null);
-  const { setCurrentUser } = useContext(AuthContext);
+  const { setCurrentUser, getUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export default function Login({ t }) {
 
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/auth/login',
+        'https://server-review.onrender.com/api/auth/login',
         inputs,
         {
           withCredentials: true,
@@ -40,6 +40,7 @@ export default function Login({ t }) {
         console.log('RESSS DATAAA', res.data.others);
         setCurrentUser(res.data.others);
         navigate('/');
+        getUser();
       } else {
         setErr('Login failed. Please check your credentials.');
       }
@@ -50,16 +51,10 @@ export default function Login({ t }) {
   };
 
   const googleButton = () => {
-    window.open(
-      'https://server-review.onrender.com/auth/google/callback',
-      '_self'
-    );
+    window.open('https://server-review.onrender.com/auth/google', '_self');
   };
   const githubButton = () => {
-    window.open(
-      'https://server-review.onrender.com/auth/github/callback',
-      '_self'
-    );
+    window.open('https://server-review.onrender.com/auth/github', '_self');
   };
 
   return (
@@ -95,9 +90,15 @@ export default function Login({ t }) {
           </form>
           <br />
           <div>
-            <Link to="/register"> {t('home.register')}</Link>
+            <Link
+              to="/register"
+              className="text-decoration-none fs-5 text-info"
+            >
+              {' '}
+              {t('home.register')}
+            </Link>
           </div>
-          {/* <div className="col-4">
+          <div className="col-4">
             <div
               className="btn btn-secondary mt-3"
               onClick={(login) => googleButton(login)}
@@ -107,7 +108,7 @@ export default function Login({ t }) {
             <div className="btn btn-secondary mt-3" onClick={githubButton}>
               Sith In With Github
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>

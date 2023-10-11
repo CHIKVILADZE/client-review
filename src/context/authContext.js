@@ -8,12 +8,12 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [err, setErr] = useState('');
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem('accessToken');
 
+  useEffect(() => {
     const getUser = () => {
       axios
-        .get('http://localhost:4000/api/auth/checkauth', {
+        .get('https://server-review.onrender.com/api/users/checkauth', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',

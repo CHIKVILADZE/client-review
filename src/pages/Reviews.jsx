@@ -14,10 +14,16 @@ function Reviews({ t }) {
       try {
         const [postResponse, moviesResponse, booksResponse, gamesResponse] =
           await Promise.all([
-            axios.get(`http://localhost:4000/api/posts/${postId}`),
-            axios.get(`http://localhost:4000/api/movies?postId=${postId}`),
-            axios.get(`http://localhost:4000/api/books?postId=${postId}`),
-            axios.get(`http://localhost:4000/api/games?postId=${postId}`),
+            axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
+            axios.get(
+              `https://server-review.onrender.com/api/movies?postId=${postId}`
+            ),
+            axios.get(
+              `https://server-review.onrender.com/api/books?postId=${postId}`
+            ),
+            axios.get(
+              `https://server-review.onrender.com/api/games?postId=${postId}`
+            ),
           ]);
 
         if (!postResponse || !postResponse.data) {
@@ -71,7 +77,7 @@ function Reviews({ t }) {
           <h2>{post.reviewName}</h2>
           <div>
             <img
-              src={`http://localhost:4000/images/${post.image}`}
+              src={`https://server-review.onrender.com/images/${post.image}`}
               alt=""
               className="img-fluid"
               style={{ width: '50%' }}
@@ -79,7 +85,7 @@ function Reviews({ t }) {
           </div>
 
           <p>
-            <span className="text-muted">
+            <span>
               {t('reviews.postBy')}: {post.author.firstName}{' '}
               {post.author.lastName} <br />
             </span>
@@ -91,7 +97,7 @@ function Reviews({ t }) {
           <h3 className="mt-4">{t('reviews.reviewData')}</h3>
           <ul className="list-group">
             {postData.map((data, index) => (
-              <li key={index} className="list-group-item">
+              <li key={index} className="list-group-item main">
                 <h6>
                   {data.author.firstName} {data.author.lastName}{' '}
                   <span className="text-secondary">

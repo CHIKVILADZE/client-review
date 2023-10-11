@@ -7,16 +7,18 @@ function PopularTags({ t }) {
 
   useEffect(() => {
     const fetchTopReviews = async () => {
-      axios.get('http://localhost:4000/api/top-posts').then((response) => {
-        setPopularReviews(response.data);
-      });
+      axios
+        .get('https://server-review.onrender.com/api/top-posts')
+        .then((response) => {
+          setPopularReviews(response.data);
+        });
     };
 
     fetchTopReviews();
   }, []);
 
   return (
-    <div className="popular-tags">
+    <div className=" popular-tags">
       <h5 className="mb-3">{t('home.popularPosts')} </h5>
       <ul className="list-group">
         {Array.isArray(popularReviews) &&
@@ -24,7 +26,7 @@ function PopularTags({ t }) {
             <Link
               to={`post/${post.id}`}
               key={post.id}
-              className="list-group-item"
+              className="main list-group-item"
             >
               {post.reviewName}
             </Link>
