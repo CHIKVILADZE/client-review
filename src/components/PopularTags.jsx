@@ -8,7 +8,7 @@ function PopularTags({ t }) {
   useEffect(() => {
     const fetchTopReviews = async () => {
       axios
-        .get('https://server-review.onrender.com/api/top-posts')
+        .get('https://review-platform-ql9e.onrender.com/api/top-posts')
         .then((response) => {
           setPopularReviews(response.data);
         });

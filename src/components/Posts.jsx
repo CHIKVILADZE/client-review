@@ -14,7 +14,7 @@ function Posts({ t }) {
     setError(null);
 
     axios
-      .get('https://server-review.onrender.com/api/posts')
+      .get('https://review-platform-ql9e.onrender.com/api/posts')
       .then((res) => {
         setPosts(
           res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -51,7 +51,7 @@ function Posts({ t }) {
                       <div>
                         {' '}
                         <img
-                          src={`https://server-review.onrender.com/images/${post.image}`}
+                          src={`https://review-platform-ql9e.onrender.com/images/${post.image}`}
                           alt=""
                           className="img-fluid"
                           style={{ width: '90%' }}

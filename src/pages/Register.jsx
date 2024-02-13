@@ -24,7 +24,7 @@ function Register({ t }) {
 
     try {
       await axios.post(
-        'https://server-review.onrender.com/api/auth/register',
+        'https://review-platform-ql9e.onrender.com/api/auth/register',
         inputs
       );
       navigate('/login');

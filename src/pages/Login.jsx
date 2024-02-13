@@ -23,7 +23,7 @@ export default function Login({ t }) {
 
     try {
       const res = await axios.post(
-        'https://server-review.onrender.com/api/auth/login',
+        'https://review-platform-ql9e.onrender.com/api/auth/login',
         inputs,
         {
           withCredentials: true,
@@ -51,10 +51,16 @@ export default function Login({ t }) {
   };
 
   const googleButton = () => {
-    window.open('https://server-review.onrender.com/auth/google', '_self');
+    window.open(
+      'https://review-platform-ql9e.onrender.com/auth/google',
+      '_self'
+    );
   };
   const githubButton = () => {
-    window.open('https://server-review.onrender.com/auth/github', '_self');
+    window.open(
+      'https://review-platform-ql9e.onrender.com/auth/github',
+      '_self'
+    );
   };
 
   return (

@@ -13,7 +13,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get('https://server-review.onrender.com/api/users/checkauth', {
+        .get('https://review-platform-ql9e.onrender.com/api/users/checkauth', {
           withCredentials: true,
           headers: {
             Accept: 'application/json',

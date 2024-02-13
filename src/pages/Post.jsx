@@ -36,21 +36,23 @@ function Post({ t }) {
           booksResponse,
           gamesResponse,
         ] = await Promise.all([
-          axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
           axios.get(
-            `https://server-review.onrender.com/api/comments?postId=${postId}`
+            `https://review-platform-ql9e.onrender.com/api/posts/${postId}`
           ),
           axios.get(
-            `https://server-review.onrender.com/api/likes?postId=${postId}`
+            `https://review-platform-ql9e.onrender.com/api/comments?postId=${postId}`
           ),
           axios.get(
-            `https://server-review.onrender.com/api/movies?postId=${postId}`
+            `https://review-platform-ql9e.onrender.com/api/likes?postId=${postId}`
           ),
           axios.get(
-            `https://server-review.onrender.com/api/books?postId=${postId}`
+            `https://review-platform-ql9e.onrender.com/api/movies?postId=${postId}`
           ),
           axios.get(
-            `https://server-review.onrender.com/api/games?postId=${postId}`
+            `https://review-platform-ql9e.onrender.com/api/books?postId=${postId}`
+          ),
+          axios.get(
+            `https://review-platform-ql9e.onrender.com/api/games?postId=${postId}`
           ),
         ]);
 
@@ -130,14 +132,18 @@ function Post({ t }) {
     const accessToken = localStorage.getItem('accessToken');
 
     axios
-      .post('https://server-review.onrender.com/api/comments', requestData, {
-        withCredentials: true,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .post(
+        'https://review-platform-ql9e.onrender.com/api/comments',
+        requestData,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((response) => {
         setComments({
           ...comments,
@@ -159,7 +165,7 @@ function Post({ t }) {
 
     axios
       .post(
-        'https://server-review.onrender.com/api/likes',
+        'https://review-platform-ql9e.onrender.com/api/likes',
         { postId: postId, userId: id },
         {
           withCredentials: true,
@@ -185,7 +191,7 @@ function Post({ t }) {
   const handleDislike = () => {
     axios
       .delete(
-        `https://server-review.onrender.com/api/likes/${currentUserLikeId}`,
+        `https://review-platform-ql9e.onrender.com/api/likes/${currentUserLikeId}`,
         {
           data: {
             postId: postId,
@@ -224,7 +230,7 @@ function Post({ t }) {
     const accessToken = localStorage.getItem('accessToken');
     try {
       const response = await axios.post(
-        `https://server-review.onrender.com/api/${reviewGroup}`,
+        `https://review-platform-ql9e.onrender.com/api/${reviewGroup}`,
         review,
         {
           withCredentials: true,
@@ -242,7 +248,7 @@ function Post({ t }) {
       };
 
       await axios.put(
-        `https://server-review.onrender.com/api/posts/${postId}`,
+        `https://review-platform-ql9e.onrender.com/api/posts/${postId}`,
         updatedPostData,
         {
           withCredentials: true,
@@ -294,7 +300,7 @@ function Post({ t }) {
 
                     <div className="container text-center">
                       <img
-                        src={`https://server-review.onrender.com/images/${post.image}`}
+                        src={`https://review-platform-ql9e.onrender.com/images/${post.image}`}
                         alt=""
                         className="img-fluid "
                         style={{ width: '100%' }}

@@ -8,7 +8,7 @@ function Dashboard() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          'https://server-review.onrender.com/api/users'
+          'https://review-platform-ql9e.onrender.com/api/users'
         );
         console.log('Users Data:', response.data);
 
@@ -33,7 +33,7 @@ function Dashboard() {
 
     axios
       .delete(
-        `https://server-review.onrender.com/api/users/${userIdToDelete}`,
+        `https://review-platform-ql9e.onrender.com/api/users/${userIdToDelete}`,
         {
           withCredentials: true,
           headers: {
@@ -59,7 +59,7 @@ function Dashboard() {
 
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToUpdate}`,
+        `https://review-platform-ql9e.onrender.com/api/users/${userIdToUpdate}`,
         {
           isAdmin: newAdminStatus,
         },
@@ -99,7 +99,7 @@ function Dashboard() {
 
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToBlock}/block`,
+        `https://review-platform-ql9e.onrender.com/api/users/${userIdToBlock}/block`,
         {
           isBlocked: true,
         },
@@ -145,7 +145,7 @@ function Dashboard() {
     const accessToken = localStorage.getItem('accessToken');
     axios
       .put(
-        `https://server-review.onrender.com/api/users/${userIdToUnblock}/block`,
+        `https://review-platform-ql9e.onrender.com/api/users/${userIdToUnblock}/block`,
         {
           isBlocked: false,
         },

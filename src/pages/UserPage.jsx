@@ -10,7 +10,7 @@ function UserPage() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          'https://server-review.onrender.com/api/posts/'
+          'https://review-platform-ql9e.onrender.com/api/posts/'
         );
         setPosts(response.data);
       } catch (error) {

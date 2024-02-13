@@ -21,7 +21,9 @@ function TextLink({ t, handleChangeLanguage, currentUserId }) {
     localStorage.removeItem('accessToken');
 
     try {
-      await axios.post('https://server-review.onrender.com/api/auth/logout');
+      await axios.post(
+        'https://review-platform-ql9e.onrender.com/api/auth/logout'
+      );
 
       setCurrentUser(null);
 

@@ -41,7 +41,7 @@ function Profile({ t }) {
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(
-        'https://server-review.onrender.com/api/posts',
+        'https://review-platform-ql9e.onrender.com/api/posts',
         form,
         {
           withCredentials: true,

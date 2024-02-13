@@ -14,15 +14,17 @@ function Reviews({ t }) {
       try {
         const [postResponse, moviesResponse, booksResponse, gamesResponse] =
           await Promise.all([
-            axios.get(`https://server-review.onrender.com/api/posts/${postId}`),
             axios.get(
-              `https://server-review.onrender.com/api/movies?postId=${postId}`
+              `https://review-platform-ql9e.onrender.com/api/posts/${postId}`
             ),
             axios.get(
-              `https://server-review.onrender.com/api/books?postId=${postId}`
+              `https://review-platform-ql9e.onrender.com/api/movies?postId=${postId}`
             ),
             axios.get(
-              `https://server-review.onrender.com/api/games?postId=${postId}`
+              `https://review-platform-ql9e.onrender.com/api/books?postId=${postId}`
+            ),
+            axios.get(
+              `https://review-platform-ql9e.onrender.com/api/games?postId=${postId}`
             ),
           ]);
 
@@ -77,7 +79,7 @@ function Reviews({ t }) {
           <h2>{post.reviewName}</h2>
           <div>
             <img
-              src={`https://server-review.onrender.com/images/${post.image}`}
+              src={`https://review-platform-ql9e.onrender.com/images/${post.image}`}
               alt=""
               className="img-fluid"
               style={{ width: '50%' }}

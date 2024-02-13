@@ -12,7 +12,7 @@ function MyProfile({ t }) {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          'https://server-review.onrender.com/api/posts'
+          'https://review-platform-ql9e.onrender.com/api/posts'
         );
         setPosts(response.data);
       } catch (error) {
@@ -31,7 +31,7 @@ function MyProfile({ t }) {
 
     try {
       const response = await axios.delete(
-        `https://server-review.onrender.com/api/posts/${postId}`,
+        `https://review-platform-ql9e.onrender.com/api/posts/${postId}`,
         {
           withCredentials: true,
           headers: {
